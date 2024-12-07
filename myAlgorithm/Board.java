@@ -11,8 +11,10 @@ public class Board {
 
     Board(int boardSize) {
         this.board = new BitSet(boardSize * boardSize);
+        this.board.set(0);
         currentPosition = 0;
         movements = new ArrayList<>();
+        movements.add(0, "" + "a1 ");
         this.boardSize = boardSize;
     }
 
@@ -39,34 +41,36 @@ public class Board {
 
     private int calculateMove(int moveNumber) {
         int returnVal;
-        int row = moveNumber % boardSize;
+        int row = (currentPosition / boardSize) + 1; // starting from 1
+        int column = (currentPosition % boardSize) + 1; // starting from 1
         switch (moveNumber) {
             case 1:
-                returnVal = row < 1 ? 0 : currentPosition - boardSize - 2;
+                returnVal = (column < 3 || (boardSize - row) < 1) ? -1 : (currentPosition + boardSize) - 2;
                 break;
             case 2:
-                returnVal = row < 0 ? 0 : currentPosition - 2 * boardSize - 1;
+                returnVal = (column < 2 || (boardSize - row) < 2) ? -1 : (currentPosition + 2 * boardSize) - 1;
                 break;
             case 3:
-                returnVal = row > 0 ? 0 : currentPosition - 2 * boardSize + 1;
+                returnVal = ((boardSize - column) < 1 || (boardSize - row) < 2) ? -1 : (currentPosition + 2 * boardSize) + 1;
                 break;
             case 4:
-                returnVal = row > 1 ? 0 : currentPosition - boardSize + 2;
+                returnVal = ((boardSize - column) < 2 || (boardSize - row) < 1) ? -1 : (currentPosition + boardSize) + 2;
                 break;
             case 5:
-                returnVal = row > 1 ? 0 : currentPosition + boardSize + 2;
+                returnVal = ((boardSize - column) < 2 || row < 2) ? -1 : (currentPosition - boardSize) + 2;
                 break;
             case 6:
-                returnVal = row > 0 ? 0 : currentPosition + 2 * boardSize + 1;
+                returnVal = ((boardSize - column) < 1 || row < 3) ? -1 : (currentPosition - 2 * boardSize) + 1;
                 break;
             case 7:
-                returnVal = row < 0 ? 0 : currentPosition + 2 * boardSize - 1;
+                returnVal = (column < 2 || row < 3) ? -1 : (currentPosition - 2 * boardSize) - 1;
                 break;
             case 8:
-                returnVal = row < 1 ? 0 : currentPosition + boardSize - 2;
+                returnVal = (column < 3 || row < 2) ? -1 : (currentPosition - boardSize) - 2;
                 break;
+
             default:
-                returnVal = 0;
+                returnVal = -1;
         }
         return returnVal;
 
@@ -86,7 +90,7 @@ public class Board {
 
     private void movePosition(int newPosition) {
 
-        movements.add(movements.size(), "" + (char) ((int) 'a' + newPosition / boardSize) + (newPosition % boardSize));
+        movements.add(movements.size(), "" + (char) ((int) 'a' + newPosition % boardSize) + (1 + (newPosition / boardSize)) + " ");
         currentPosition = newPosition;
         board.set(newPosition);
     }

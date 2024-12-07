@@ -3,8 +3,6 @@ package myAlgorithm;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
-import myAlgorithm.Board;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +25,7 @@ public class search {
 
         ArrayList<String> result = searchBoard(boardSize, String.valueOf(method), timeLimit);*/
 
-        ArrayList<String> result = searchBoard(8, "a", 15);
+        ArrayList<String> result = searchBoard(5, "a", 15);
 
         long end_time = System.currentTimeMillis();
         System.out.println("Run time of the algorithm " + ((end_time - start_time) / 1000) /60 + " minutes " + ((end_time - start_time) / 1000) %60 + " seconds");

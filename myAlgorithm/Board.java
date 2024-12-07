@@ -42,7 +42,6 @@ public class Board {
         int row = moveNumber % boardSize;
         switch (moveNumber) {
             case 1:
-
                 returnVal = row < 1 ? 0 : currentPosition - boardSize - 2;
                 break;
             case 2:

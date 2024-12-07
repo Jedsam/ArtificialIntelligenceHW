@@ -26,12 +26,11 @@ public class search {
         int timeLimit = scanner.nextInt();
 
         ArrayList<String> result = searchBoard(boardSize, String.valueOf(method), timeLimit);*/
-        
+
         ArrayList<String> result = searchBoard(8, "a", 15);
 
         long end_time = System.currentTimeMillis();
-
-        System.out.println("Run time of the algorithm " + (end_time - start_time) / 1000 + " seconds");
+        System.out.println("Run time of the algorithm " + ((end_time - start_time) / 1000) /60 + " minutes " + ((end_time - start_time) / 1000) %60 + " seconds");
         if (result == null) {
             System.out.println("No result found");
         } else {
@@ -104,7 +103,6 @@ public class search {
                     currentBoards.add(tempBoard);
                 }
             }
-            currentBoards.remove();
         }
         if (currentBoard.isDone()) {
             return currentBoard.getMovements();

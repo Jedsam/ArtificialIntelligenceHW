@@ -3,7 +3,6 @@ package myAlgorithm;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import myAlgorithm.Board;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,7 +14,19 @@ public class search {
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
-        ArrayList<String> result = searchBoard(42, "b", 15);
+
+        /*Scanner scanner = new Scanner(System.in);     // For taking input from user
+        System.out.println("Enter the board size: ");   // Commented out for easy testing
+        int boardSize = scanner.nextInt();
+        System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2b): ");
+        char method = scanner.next().charAt(0);
+        System.out.println("Enter the time limit in minutes: ");
+        int timeLimit = scanner.nextInt();
+
+        ArrayList<String> result = searchBoard(boardSize, String.valueOf(method), timeLimit);*/
+
+        ArrayList<String> result = searchBoard(5, "a", 15);
+
         long end_time = System.currentTimeMillis();
 
         System.out.println("Run time of the algorithm " + (end_time - start_time) + "miliseconds");
@@ -94,7 +105,6 @@ public class search {
                     currentBoards.add(tempBoard);
                 }
             }
-            currentBoards.remove();
         }
         if (currentBoard.isDone()) {
             return currentBoard.getMovements();

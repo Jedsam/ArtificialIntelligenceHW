@@ -37,34 +37,37 @@ public class Board {
         return movements.size() >= boardSize * boardSize;
     }
 
+    public int getCurrentPosition() {
+        return this.currentPosition;
+    }
+
     private int calculateMove(int moveNumber) {
         int returnVal;
-        int row = moveNumber % boardSize;
+        int column = currentPosition % boardSize;
         switch (moveNumber) {
-            case 1:
-
-                returnVal = row < 1 ? 0 : currentPosition - boardSize - 2;
-                break;
-            case 2:
-                returnVal = row < 0 ? 0 : currentPosition - 2 * boardSize - 1;
-                break;
-            case 3:
-                returnVal = row > 0 ? 0 : currentPosition - 2 * boardSize + 1;
-                break;
-            case 4:
-                returnVal = row > 1 ? 0 : currentPosition - boardSize + 2;
-                break;
-            case 5:
-                returnVal = row > 1 ? 0 : currentPosition + boardSize + 2;
-                break;
-            case 6:
-                returnVal = row > 0 ? 0 : currentPosition + 2 * boardSize + 1;
+            case 8:
+                returnVal = column < 2 ? 0 : currentPosition - boardSize - 2;
                 break;
             case 7:
-                returnVal = row < 0 ? 0 : currentPosition + 2 * boardSize - 1;
+                returnVal = column < 1 ? 0 : currentPosition - 2 * boardSize - 1;
                 break;
-            case 8:
-                returnVal = row < 1 ? 0 : currentPosition + boardSize - 2;
+            case 6:
+                returnVal = (boardSize - column) < 2 ? 0 : currentPosition - 2 * boardSize + 1;
+                break;
+            case 5:
+                returnVal = (boardSize - column) < 3 ? 0 : currentPosition - boardSize + 2;
+                break;
+            case 4:
+                returnVal = (boardSize - column) < 3 ? 0 : currentPosition + boardSize + 2;
+                break;
+            case 3:
+                returnVal = (boardSize - column) < 2 ? 0 : currentPosition + 2 * boardSize + 1;
+                break;
+            case 2:
+                returnVal = column < 1 ? 0 : currentPosition + 2 * boardSize - 1;
+                break;
+            case 1:
+                returnVal = column < 2 ? 0 : currentPosition + boardSize - 2;
                 break;
             default:
                 returnVal = 0;
@@ -73,12 +76,34 @@ public class Board {
 
     }
 
+    public boolean moveBoard(int moveNumber) {
+
+        moveNumber = calculateMove(moveNumber);
+
+        if (moveNumber < 0 || board.get(moveNumber) || moveNumber >= boardSize * boardSize) {
+            return false;
+        }
+        movePosition(moveNumber);
+        return true;
+    }
+
+    public boolean unMoveBoard(int previousPosition) {
+        if (previousPosition < 0 || !board.get(previousPosition) || previousPosition >= boardSize * boardSize) {
+            return false;
+        }
+        board.clear(currentPosition);
+        movements.remove(movements.size() - 1);
+        movements.trimToSize();
+        currentPosition = previousPosition;
+        return true;
+    }
+
     public Board moveBoardNew(int moveNumber) {
 
         Board newBoard = this.clone();
         moveNumber = calculateMove(moveNumber);
 
-        if (moveNumber < 0 || board.get(moveNumber)) {
+        if (moveNumber < 0 || board.get(moveNumber) || moveNumber >= boardSize * boardSize) {
             return null;
         }
         newBoard.movePosition(moveNumber);
@@ -87,9 +112,9 @@ public class Board {
 
     private void movePosition(int newPosition) {
 
-        movements.add(movements.size(), "" + (char) ((int) 'a' + newPosition / boardSize) + (newPosition % boardSize));
+        movements.add(movements.size(),
+                "" + (char) ((int) 'a' + (newPosition % boardSize)) + ((newPosition / boardSize) + 1));
         currentPosition = newPosition;
         board.set(newPosition);
     }
-
 }

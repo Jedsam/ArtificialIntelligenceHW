@@ -15,10 +15,10 @@ public class search {
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
-        ArrayList<String> result = searchBoard(8, "a", 15);
+        ArrayList<String> result = searchBoard(42, "b", 15);
         long end_time = System.currentTimeMillis();
 
-        System.out.println("Run time of the algorithm " + (end_time - start_time) / 1000 + " seconds");
+        System.out.println("Run time of the algorithm " + (end_time - start_time) + "miliseconds");
         if (result == null) {
             System.out.println("No result found");
         } else {
@@ -42,7 +42,10 @@ public class search {
                     case "a":
                         return breadFirstSearch(board);
                     case "b":
-                        return DepthFirstSearch(board);
+                        if (DepthFirstSearch(board))
+                            return board.getMovements();
+                        else
+                            return null;
                     case "c":
                         return DepthFirstHeuristich1b(board);
                     case "d":
@@ -100,9 +103,26 @@ public class search {
         }
     }
 
-    private static ArrayList<String> DepthFirstSearch(Board board) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'DepthFirstSearch'");
+    private static boolean DepthFirstSearch(Board board) {
+        int currentMove;
+
+        for (int i = 1; i < 9; i++) {
+            currentMove = board.getCurrentPosition();
+            if (board.isDone()) {
+                return true;
+            }
+            if (!board.moveBoard(i)) {
+                continue;
+            }
+            if (!DepthFirstSearch(board)) {
+                if (!board.unMoveBoard(currentMove)) {
+                    System.err.println("Could not unmove board!");
+                }
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static ArrayList<String> DepthFirstHeuristich1b(Board board) {

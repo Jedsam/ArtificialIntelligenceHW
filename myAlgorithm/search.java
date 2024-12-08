@@ -15,17 +15,21 @@ public class search {
 
         long start_time = System.currentTimeMillis();
 
-        /*Scanner scanner = new Scanner(System.in);     // For taking input from user
-        System.out.println("Enter the board size: ");   // Commented out for easy testing
-        int boardSize = scanner.nextInt();
-        System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2b): ");
-        char method = scanner.next().charAt(0);
-        System.out.println("Enter the time limit in minutes: ");
-        int timeLimit = scanner.nextInt();
+        /*
+         * Scanner scanner = new Scanner(System.in); // For taking input from user
+         * System.out.println("Enter the board size: "); // Commented out for easy
+         * testing
+         * int boardSize = scanner.nextInt();
+         * System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2b): ");
+         * char method = scanner.next().charAt(0);
+         * System.out.println("Enter the time limit in minutes: ");
+         * int timeLimit = scanner.nextInt();
+         * 
+         * ArrayList<String> result = searchBoard(boardSize, String.valueOf(method),
+         * timeLimit);
+         */
 
-        ArrayList<String> result = searchBoard(boardSize, String.valueOf(method), timeLimit);*/
-
-        ArrayList<String> result = searchBoard(5, "a", 15);
+        ArrayList<String> result = searchBoard(5, "b", 15);
 
         long end_time = System.currentTimeMillis();
 
@@ -43,7 +47,9 @@ public class search {
     }
 
     private static ArrayList<String> searchBoard(int boardSize, String method, int timeLimit) {
+        Board.start(boardSize); // set up variables
         Board board = new Board(boardSize);
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         Future<ArrayList<String>> future = executor.submit(() -> {
@@ -98,7 +104,7 @@ public class search {
 
         while (!currentBoard.isDone()) {
             currentBoard = currentBoards.poll();
-            for (int i = 1; i < 9; i++) {
+            for (int i = 9; i > 0; i--) {
 
                 tempBoard = currentBoard.moveBoardNew(i);
                 if (tempBoard != null) {
@@ -124,12 +130,12 @@ public class search {
             if (!board.moveBoard(i)) {
                 continue;
             }
-            if (!DepthFirstSearch(board)) {
+            if (DepthFirstSearch(board)) {
+                return true;
+            } else {
                 if (!board.unMoveBoard(currentMove)) {
                     System.err.println("Could not unmove board!");
                 }
-            } else {
-                return true;
             }
         }
         return false;

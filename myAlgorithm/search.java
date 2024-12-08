@@ -1,8 +1,10 @@
 package myAlgorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,6 +13,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class search {
+
+    static long openedNodes = 0;
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
@@ -29,10 +33,11 @@ public class search {
          * timeLimit);
          */
 
-        ArrayList<String> result = searchBoard(5, "b", 15);
+        
+        ArrayList<String> result = searchBoard(16, "b", 15);
 
         long end_time = System.currentTimeMillis();
-
+        Collections.reverse(result);
         System.out.println("Run time of the algorithm " + (end_time - start_time) + "miliseconds");
         if (result == null) {
             System.out.println("No result found");
@@ -40,7 +45,7 @@ public class search {
             for (String string : result) {
                 System.out.print(string);
             }
-
+            System.out.println("\nOpened nodes: " + openedNodes);
         }
         // 8, 16, 32, 41, 52 sizes
 
@@ -59,10 +64,7 @@ public class search {
                     case "a":
                         return breadFirstSearch(board);
                     case "b":
-                        if (DepthFirstSearch(board))
-                            return board.getMovements();
-                        else
-                            return null;
+                        return DepthFirstSearch(board);
                     case "c":
                         return DepthFirstHeuristich1b(board);
                     case "d":
@@ -76,7 +78,6 @@ public class search {
                     System.out.println("Function was interrupted");
                 }
             }
-
         });
 
         try {
@@ -104,41 +105,53 @@ public class search {
 
         while (!currentBoard.isDone()) {
             currentBoard = currentBoards.poll();
-            for (int i = 9; i > 0; i--) {
-
+            for (int i = 1; i < 9; i++) {
                 tempBoard = currentBoard.moveBoardNew(i);
                 if (tempBoard != null) {
                     currentBoards.add(tempBoard);
+                    openedNodes++;
                 }
             }
         }
         if (currentBoard.isDone()) {
-            return currentBoard.getMovements();
+            ArrayList<String> result = new ArrayList<>();
+            while (currentBoard != null) {
+                result.add(Board.convertPositionToCoordinate(currentBoard.getCurrentPosition()));
+                currentBoard = currentBoard.getParentBoard();
+            }
+            return result;
         } else {
             return null; // not found
         }
     }
 
-    private static boolean DepthFirstSearch(Board board) {
-        int currentMove;
-
-        for (int i = 1; i < 9; i++) {
-            currentMove = board.getCurrentPosition();
-            if (board.isDone()) {
-                return true;
+    private static ArrayList<String> DepthFirstSearch(Board board) {
+        Stack<Board> lifoQueue = new Stack<>();
+        lifoQueue.push(board);
+        Board currentBoard;
+        Board tempBoard;
+    
+        while (!lifoQueue.isEmpty()) {
+            currentBoard = lifoQueue.pop();
+            if (currentBoard.isDone()) {
+                ArrayList<String> result = new ArrayList<>();
+                while (currentBoard.getParentBoard() != null) {
+                    result.add(Board.convertPositionToCoordinate(currentBoard.getCurrentPosition()));
+                    currentBoard = currentBoard.getParentBoard();
+                }
+                return result;
             }
-            if (!board.moveBoard(i)) {
-                continue;
-            }
-            if (DepthFirstSearch(board)) {
-                return true;
-            } else {
-                if (!board.unMoveBoard(currentMove)) {
-                    System.err.println("Could not unmove board!");
+    
+            for (int i = 1; i < 9; i++) {
+                tempBoard = currentBoard.moveBoardNew(i);
+                if (tempBoard != null) {
+                    lifoQueue.push(tempBoard);
+                    openedNodes++;
                 }
             }
         }
-        return false;
+    
+        return null;
     }
 
     private static ArrayList<String> DepthFirstHeuristich1b(Board board) {

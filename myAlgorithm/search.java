@@ -1,7 +1,6 @@
 package myAlgorithm;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -33,10 +32,11 @@ public class search {
          * timeLimit);
          */
 
-        ArrayList<String> result = startSearch(8, "b", 15);
+        ArrayList<String> result = startSearch(8, "c", 15);
 
         long end_time = System.currentTimeMillis();
-        Collections.reverse(result);
+        if (result != null)
+            Collections.reverse(result);
         System.out.println("Run time of the algorithm " + (end_time - start_time) + "miliseconds");
         if (result == null) {
             System.out.println("No result found");
@@ -87,9 +87,17 @@ public class search {
         if (method.equals("a")) {
             Queue<Board> tempQueue = new LinkedList<Board>();
             myQueue = (MyQueue) (new BFSQueue(tempQueue));
-        } else {
+        } else if (method.equals("b")) {
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new DFSQueue(tempStack));
+        } else if (method.equals("c")) {
+
+            Stack<Board> tempStack = new Stack<Board>();
+            myQueue = (MyQueue) (new H1BQueue(tempStack));
+        } else {
+
+            Stack<Board> tempStack = new Stack<Board>();
+            myQueue = (MyQueue) (new H2Queue(tempStack));
         }
         myQueue.add(board);
         return SearchBoard(myQueue);
@@ -112,7 +120,6 @@ public class search {
             myBoardQueue.calculateNextBoards(currentBoard);
 
         }
-
         return null;
     }
 

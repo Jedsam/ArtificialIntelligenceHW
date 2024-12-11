@@ -2,6 +2,7 @@ package myAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.Map;
 
 public class H1BQueue extends DFSQueue {
 
@@ -11,21 +12,18 @@ public class H1BQueue extends DFSQueue {
 
     @Override
     public void calculateNextBoards(Board currentBoard) {
-        Board tempBoard;
-        ArrayList<Board> tempList = new ArrayList<Board>();
+        ArrayList<Map.Entry<Board, Integer>> tempList = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            tempBoard = currentBoard.moveBoardNewWithH1B(i);
-            if (tempBoard != null) {
-                tempList.add(tempBoard);
+            Map.Entry<Board, Integer> result = currentBoard.moveBoardNewWithH1B(i);
+            if (result != null) {
+                tempList.add(result);
             }
         }
 
-        tempList.sort((a, b) -> {
-            return b.heuristicVal - a.heuristicVal;
-        });
-        for (Board board : tempList) {
-            this.add(board);
-            Board.openedNodes++;
+        tempList.sort((a, b) -> b.getValue() - a.getValue());
+        for (Map.Entry<Board, Integer> result : tempList) {
+            this.add(result.getKey());  // take board with getKey()
+            search.openedNodes++;
         }
     }
 }

@@ -14,6 +14,7 @@ import java.util.concurrent.TimeoutException;
 
 public class search {
 
+    public static long openedNodes = 1;
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
@@ -23,7 +24,7 @@ public class search {
          * System.out.println("Enter the board size: "); // Commented out for easy
          * testing
          * int boardSize = scanner.nextInt();
-         * System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2b): ");
+         * System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2): ");
          * char method = scanner.next().charAt(0);
          * System.out.println("Enter the time limit in minutes: ");
          * int timeLimit = scanner.nextInt();
@@ -44,7 +45,7 @@ public class search {
             for (String string : result) {
                 System.out.print(string);
             }
-            System.out.println("\nOpened nodes: " + Board.openedNodes);
+            System.out.println("\nOpened nodes: " + openedNodes);
         }
         // 8, 16, 32, 41, 52 sizes
 

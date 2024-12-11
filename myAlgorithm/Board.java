@@ -1,13 +1,12 @@
 package myAlgorithm;
 
 import java.util.BitSet;
+import java.util.Map;
 
 public class Board {
     private static int tileCount;
     private static int boardSize;
 
-    public int heuristicVal;
-    public static long openedNodes = 1;
     public static int lastDepth = 0;
 
     private BitSet board;
@@ -127,20 +126,19 @@ public class Board {
         return newBoard;
     }
 
-    public Board moveBoardNewWithH1B(int moveNumber) {
+    public Map.Entry<Board, Integer> moveBoardNewWithH1B(int moveNumber) {
 
         int newPosition = calculateMove(moveNumber);
 
-        int heuristicValNew = calculateH1B(newPosition);
+        int heuristicVal = calculateH1B(newPosition);
         if (newPosition < 0 || board.get(newPosition) || newPosition >= tileCount ||
-                (heuristicValNew == 0 && board.cardinality() > tileCount)) {
+                (heuristicVal == 0 && board.cardinality() > tileCount)) {
             return null;
         }
         Board newBoard = clone();
-        newBoard.heuristicVal = heuristicValNew;
         newBoard.parentBoard = this;
         newBoard.movePosition(newPosition);
-        return newBoard;
+        return Map.entry(newBoard, heuristicVal);
     }
 
     private int calculateH1B(int newPosition) {

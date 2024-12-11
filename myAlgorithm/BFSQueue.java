@@ -22,7 +22,7 @@ public class BFSQueue implements MyQueue {
             if (tempBoard != null) {
 
                 this.add(tempBoard);
-                Board.openedNodes++;
+                search.openedNodes++;
             }
         }
     }

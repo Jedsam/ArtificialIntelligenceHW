@@ -1,5 +1,12 @@
 package myAlgorithm;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -7,6 +14,7 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -20,17 +28,24 @@ public class search {
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
-        
-        Scanner scanner = new Scanner(System.in); // For taking input from user
+
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter("output.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        } // For taking input from user
         System.out.println("Enter the board size: "); // Commented out for easy
-
-        int boardSize = scanner.nextInt();
+        Scanner input = new Scanner(System.in);
+        int boardSize = input.nextInt();
         System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2): ");
-        char method = scanner.next().charAt(0);
+        char method = input.next().charAt(0);
         System.out.println("Enter the time limit in minutes: ");
-        int timeLimit = scanner.nextInt();
+        int timeLimit = input.nextInt();
+        ArrayList<String> result;
 
-        ArrayList<String> result = startSearch(boardSize, String.valueOf(method), timeLimit);
+        result = startSearch(boardSize, String.valueOf(method), timeLimit);
 
         long end_time = System.currentTimeMillis();
         if (result != null)
@@ -39,13 +54,15 @@ public class search {
         if (result == null) {
             System.out.println("No result found");
         } else {
+            System.out.println("A solution found.");
             for (String string : result) {
-                System.out.print(string);
+                writer.println(string);
             }
-            System.out.println("\nOpened nodes: " + openedNodes);
+            System.out.println("Opened nodes: " + openedNodes);
         }
         // 8, 16, 32, 41, 52 sizes
-
+        input.close();
+        writer.close();
     }
 
     private static ArrayList<String> startSearch(int boardSize, String method, int timeLimit) {
@@ -69,12 +86,18 @@ public class search {
             // Wait for the function to complete, or timeout after the specified time limit
             return future.get(timeLimit, TimeUnit.MINUTES);
         } catch (TimeoutException e) {
-            System.out.println("Timeout reached, canceling function");
+            System.out.println("Timeout.");
             future.cancel(true); // Cancel the task
             return null; // Return null if timeout occurs
-        } catch (Exception e) {
+        } catch (OutOfMemoryError e) {
+            System.out.println("Out of Memory");
+            return null;
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            return null; // Return null for other exceptions
+            return null;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
         } finally {
             executor.shutdownNow(); // Clean up the executor
         }

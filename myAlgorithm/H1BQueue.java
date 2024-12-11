@@ -19,9 +19,9 @@ public class H1BQueue extends DFSQueue {
                 tempList.add(tempBoard);
             }
         }
-        
+
         tempList.sort((a, b) -> {
-            return a.heuristicVal - b.heuristicVal;
+            return b.heuristicVal - a.heuristicVal;
         });
         for (Board board : tempList) {
             this.add(board);

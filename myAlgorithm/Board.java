@@ -132,14 +132,14 @@ public class Board {
         int newPosition = calculateMove(moveNumber);
 
         int heuristicValNew = calculateH1B(newPosition);
-        if (moveNumber < 0 || board.get(moveNumber) || moveNumber >= tileCount ||
+        if (newPosition < 0 || board.get(newPosition) || newPosition >= tileCount ||
                 (heuristicValNew == 0 && board.cardinality() > tileCount)) {
             return null;
         }
         Board newBoard = clone();
         newBoard.heuristicVal = heuristicValNew;
         newBoard.parentBoard = this;
-        newBoard.movePosition(moveNumber);
+        newBoard.movePosition(newPosition);
         return newBoard;
     }
 

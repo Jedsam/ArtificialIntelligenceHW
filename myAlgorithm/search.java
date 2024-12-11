@@ -15,8 +15,6 @@ import java.util.concurrent.TimeoutException;
 
 public class search {
 
-    static long openedNodes = 1;
-
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
@@ -46,7 +44,7 @@ public class search {
             for (String string : result) {
                 System.out.print(string);
             }
-            System.out.println("\nOpened nodes: " + openedNodes);
+            System.out.println("\nOpened nodes: " + Board.openedNodes);
         }
         // 8, 16, 32, 41, 52 sizes
 
@@ -97,13 +95,11 @@ public class search {
         return SearchBoard(myQueue);
     }
 
-    private static ArrayList<String> SearchBoard(MyQueue collection) {
+    private static ArrayList<String> SearchBoard(MyQueue myBoardQueue) {
         Board currentBoard;
-        Board tempBoard;
+        while (!myBoardQueue.isEmpty()) {
 
-        while (!collection.isEmpty()) {
-
-            currentBoard = collection.get();
+            currentBoard = myBoardQueue.get();
 
             if (currentBoard.isDone()) {
                 ArrayList<String> result = new ArrayList<>();
@@ -113,15 +109,8 @@ public class search {
                 }
                 return result;
             }
+            myBoardQueue.calculateNextBoards(currentBoard);
 
-            for (int i = 1; i < 9; i++) {
-                tempBoard = currentBoard.moveBoardNew(i);
-                if (tempBoard != null) {
-
-                    collection.add(tempBoard);
-                    openedNodes++;
-                }
-            }
         }
 
         return null;

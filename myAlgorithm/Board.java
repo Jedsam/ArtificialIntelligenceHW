@@ -4,11 +4,14 @@ import java.util.BitSet;
 
 public class Board {
     private static int tileCount;
+    private static int boardSize;
+
+    public static long openedNodes = 1;
     public static int lastDepth = 0;
+
     private BitSet board;
     private int currentPosition;
     private Board parentBoard;
-    private static int boardSize;
 
     public static void start(int boardSize) {
         tileCount = boardSize * boardSize;

@@ -15,6 +15,19 @@ public class BFSQueue implements MyQueue {
     }
 
     @Override
+    public void calculateNextBoards(Board currentBoard){
+        Board tempBoard;
+        for (int i = 1; i < 9; i++) {
+            tempBoard = currentBoard.moveBoardNew(i);
+            if (tempBoard != null) {
+
+                this.add(tempBoard);
+                Board.openedNodes++;
+            }
+        }
+    }
+    
+    @Override
     public Board get() {
         return boardList.poll();
     }

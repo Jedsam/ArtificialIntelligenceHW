@@ -48,7 +48,7 @@ public class Board {
         int size = board.cardinality();
         boolean result = size >= tileCount;
         if (size > lastDepth) {
-            System.out.print(size + " ");
+            // System.out.print(size + " ");
             lastDepth = size;
         }
         return result;
@@ -115,7 +115,7 @@ public class Board {
         return newBoard;
     }
 
-    public Map.Entry<Board, Integer> createNextBoardH1B(int moveNumber) {
+    public Map.Entry<Board, Integer> createNextBoardH(int moveNumber) {
 
         int newPosition = calculateNextPosition(moveNumber);
 
@@ -141,6 +141,27 @@ public class Board {
             heuristic++;
         }
         return heuristic;
+    }
+
+    // Returns 1 for true -1 for false
+    public int h2Compare(Board board) {
+        if (this.lengthFromCorner() > board.lengthFromCorner())
+            return 1;
+        else
+            return -1;
+
+    }
+
+    private double lengthFromCorner() {
+        int row = this.currentPosition / boardSize + 1;
+        int column = this.currentPosition % boardSize + 1;
+
+        if (row >= boardSize / 2)
+            row = boardSize - row;
+        if (column >= boardSize / 2)
+            column = boardSize - column;
+
+        return Math.sqrt(column * column + row * row);
     }
 
     private String convertPositionToCoordinate(int position) {

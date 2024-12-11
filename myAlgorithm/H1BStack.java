@@ -14,7 +14,7 @@ public class H1BStack extends DFSStack {
     public void calculateNextBoards(Board currentBoard) {
         ArrayList<Map.Entry<Board, Integer>> tempList = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            Map.Entry<Board, Integer> result = currentBoard.createNextBoardH1B(i);
+            Map.Entry<Board, Integer> result = currentBoard.createNextBoardH(i);
             if (result != null) {
                 tempList.add(result);
             }
@@ -22,7 +22,7 @@ public class H1BStack extends DFSStack {
 
         tempList.sort((a, b) -> b.getValue() - a.getValue());
         for (Map.Entry<Board, Integer> result : tempList) {
-            this.add(result.getKey());  // take board with getKey()
+            this.add(result.getKey()); // take board with getKey()
             search.openedNodes++;
         }
     }

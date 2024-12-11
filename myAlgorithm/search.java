@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Stack;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -15,25 +16,21 @@ import java.util.concurrent.TimeoutException;
 public class search {
 
     public static long openedNodes = 1;
+
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
+        
+        Scanner scanner = new Scanner(System.in); // For taking input from user
+        System.out.println("Enter the board size: "); // Commented out for easy
 
-        /*
-         * Scanner scanner = new Scanner(System.in); // For taking input from user
-         * System.out.println("Enter the board size: "); // Commented out for easy
-         * testing
-         * int boardSize = scanner.nextInt();
-         * System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2): ");
-         * char method = scanner.next().charAt(0);
-         * System.out.println("Enter the time limit in minutes: ");
-         * int timeLimit = scanner.nextInt();
-         * 
-         * ArrayList<String> result = searchBoard(boardSize, String.valueOf(method),
-         * timeLimit);
-         */
+        int boardSize = scanner.nextInt();
+        System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2): ");
+        char method = scanner.next().charAt(0);
+        System.out.println("Enter the time limit in minutes: ");
+        int timeLimit = scanner.nextInt();
 
-        ArrayList<String> result = startSearch(8, "c", 15);
+        ArrayList<String> result = startSearch(boardSize, String.valueOf(method), timeLimit);
 
         long end_time = System.currentTimeMillis();
         if (result != null)
@@ -92,11 +89,9 @@ public class search {
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new DFSStack(tempStack));
         } else if (method.equals("c")) {
-
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new H1BStack(tempStack));
         } else {
-
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new H2Stack(tempStack));
         }

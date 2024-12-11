@@ -1,8 +1,11 @@
 package myAlgorithm;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,6 +14,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class search {
+
+    static long openedNodes = 1;
+
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
@@ -29,10 +35,10 @@ public class search {
          * timeLimit);
          */
 
-        ArrayList<String> result = searchBoard(5, "b", 15);
+        ArrayList<String> result = startSearch(8, "b", 15);
 
         long end_time = System.currentTimeMillis();
-
+        Collections.reverse(result);
         System.out.println("Run time of the algorithm " + (end_time - start_time) + "miliseconds");
         if (result == null) {
             System.out.println("No result found");
@@ -40,13 +46,13 @@ public class search {
             for (String string : result) {
                 System.out.print(string);
             }
-
+            System.out.println("\nOpened nodes: " + openedNodes);
         }
         // 8, 16, 32, 41, 52 sizes
 
     }
 
-    private static ArrayList<String> searchBoard(int boardSize, String method, int timeLimit) {
+    private static ArrayList<String> startSearch(int boardSize, String method, int timeLimit) {
         Board.start(boardSize); // set up variables
         Board board = new Board(boardSize);
 
@@ -55,28 +61,12 @@ public class search {
         Future<ArrayList<String>> future = executor.submit(() -> {
             try {
                 System.out.println("Function started");
-                switch (method) {
-                    case "a":
-                        return breadFirstSearch(board);
-                    case "b":
-                        if (DepthFirstSearch(board))
-                            return board.getMovements();
-                        else
-                            return null;
-                    case "c":
-                        return DepthFirstHeuristich1b(board);
-                    case "d":
-                        return DepthFirstHeuristich2(board);
-                    default:
-                        System.out.println("Invalid method");
-                        return new ArrayList<>(); // Return an empty list for invalid method
-                }
+                return startSearchBoard(board, method);
             } finally {
                 if (Thread.currentThread().isInterrupted()) {
                     System.out.println("Function was interrupted");
                 }
             }
-
         });
 
         try {
@@ -94,61 +84,47 @@ public class search {
         }
     }
 
-    private static ArrayList<String> breadFirstSearch(Board board) {
+    private static ArrayList<String> startSearchBoard(Board board, String method) {
+        MyQueue myQueue;
+        if (method.equals("a")) {
+            Queue<Board> tempQueue = new LinkedList<Board>();
+            myQueue = (MyQueue) (new BFSQueue(tempQueue));
+        } else {
+            Stack<Board> tempStack = new Stack<Board>();
+            myQueue = (MyQueue) (new DFSQueue(tempStack));
+        }
+        myQueue.add(board);
+        return SearchBoard(myQueue);
+    }
 
-        Queue<Board> currentBoards = new LinkedList<>();
+    private static ArrayList<String> SearchBoard(MyQueue collection) {
+        Board currentBoard;
+        Board tempBoard;
 
-        currentBoards.add(board);
-        Board currentBoard, tempBoard;
-        currentBoard = board;
+        while (!collection.isEmpty()) {
 
-        while (!currentBoard.isDone()) {
-            currentBoard = currentBoards.poll();
-            for (int i = 9; i > 0; i--) {
+            currentBoard = collection.get();
 
+            if (currentBoard.isDone()) {
+                ArrayList<String> result = new ArrayList<>();
+                while (currentBoard != null) {
+                    result.add(currentBoard.getCurrentCoordinate());
+                    currentBoard = currentBoard.getParentBoard();
+                }
+                return result;
+            }
+
+            for (int i = 1; i < 9; i++) {
                 tempBoard = currentBoard.moveBoardNew(i);
                 if (tempBoard != null) {
-                    currentBoards.add(tempBoard);
+
+                    collection.add(tempBoard);
+                    openedNodes++;
                 }
             }
         }
-        if (currentBoard.isDone()) {
-            return currentBoard.getMovements();
-        } else {
-            return null; // not found
-        }
-    }
 
-    private static boolean DepthFirstSearch(Board board) {
-        int currentMove;
-
-        for (int i = 1; i < 9; i++) {
-            currentMove = board.getCurrentPosition();
-            if (board.isDone()) {
-                return true;
-            }
-            if (!board.moveBoard(i)) {
-                continue;
-            }
-            if (DepthFirstSearch(board)) {
-                return true;
-            } else {
-                if (!board.unMoveBoard(currentMove)) {
-                    System.err.println("Could not unmove board!");
-                }
-            }
-        }
-        return false;
-    }
-
-    private static ArrayList<String> DepthFirstHeuristich1b(Board board) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'DepthFirstHeuristich1b'");
-    }
-
-    private static ArrayList<String> DepthFirstHeuristich2(Board board) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'DepthFirstHeuristich2'");
+        return null;
     }
 
     protected class InterruptTimerTask extends TimerTask {

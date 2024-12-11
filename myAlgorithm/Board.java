@@ -55,6 +55,10 @@ public class Board {
         return this.currentPosition;
     }
 
+    public String getCurrentCoordinate() {
+        return convertPositionToCoordinate(this.currentPosition);
+    }
+
     private int calculateMove(int moveNumber) {
         int returnVal;
         int column = (currentPosition % boardSize) + 1; // starting from 1
@@ -102,7 +106,6 @@ public class Board {
         return true;
     }
 
-
     public Board moveBoardNew(int moveNumber) {
 
         moveNumber = calculateMove(moveNumber);
@@ -116,7 +119,7 @@ public class Board {
         return newBoard;
     }
 
-    public static String convertPositionToCoordinate(int position) {
+    private String convertPositionToCoordinate(int position) {
         return "" + (char) ((int) 'a' + position % boardSize) + (1 + (position / boardSize)) + " ";
     }
 

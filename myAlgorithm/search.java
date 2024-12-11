@@ -13,10 +13,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-
 public class search {
 
-    static long openedNodes = 0;
+    static long openedNodes = 1;
+
     public static void main(String[] args) {
 
         long start_time = System.currentTimeMillis();
@@ -35,7 +35,6 @@ public class search {
          * timeLimit);
          */
 
-        
         ArrayList<String> result = startSearch(8, "b", 15);
 
         long end_time = System.currentTimeMillis();
@@ -53,7 +52,6 @@ public class search {
 
     }
 
-
     private static ArrayList<String> startSearch(int boardSize, String method, int timeLimit) {
         Board.start(boardSize); // set up variables
         Board board = new Board(boardSize);
@@ -63,7 +61,7 @@ public class search {
         Future<ArrayList<String>> future = executor.submit(() -> {
             try {
                 System.out.println("Function started");
-                return SearchBoard(board, method);
+                return startSearchBoard(board, method);
             } finally {
                 if (Thread.currentThread().isInterrupted()) {
                     System.out.println("Function was interrupted");
@@ -86,56 +84,48 @@ public class search {
         }
     }
 
+    private static ArrayList<String> startSearchBoard(Board board, String method) {
+        MyQueue myQueue;
+        if (method.equals("a")) {
+            Queue<Board> tempQueue = new LinkedList<Board>();
+            myQueue = (MyQueue) (new BFSQueue(tempQueue));
+        } else {
+            Stack<Board> tempStack = new Stack<Board>();
+            myQueue = (MyQueue) (new DFSQueue(tempStack));
+        }
+        myQueue.add(board);
+        return SearchBoard(myQueue);
+    }
 
-    private static ArrayList<String> SearchBoard(Board board, String method) {
+    private static ArrayList<String> SearchBoard(MyQueue collection) {
         Board currentBoard;
         Board tempBoard;
-        Collection<Board> collection;
 
-        if (method.equals("a")) {
-            collection = new LinkedList<>();    // Queue for BFS
-            ((Queue<Board>) collection).add(board);
-        }
-        else {
-            collection = new Stack<>();         // Stack for DFS
-            ((Stack<Board>) collection).push(board);
-        }
-        
-    
         while (!collection.isEmpty()) {
-            if (method.equals("a")) {
-                currentBoard = ((Queue<Board>) collection).poll();
-            } else {
-                currentBoard = ((Stack<Board>) collection).pop();
-            }
+
+            currentBoard = collection.get();
 
             if (currentBoard.isDone()) {
                 ArrayList<String> result = new ArrayList<>();
                 while (currentBoard != null) {
-                    result.add(Board.convertPositionToCoordinate(currentBoard.getCurrentPosition()));
+                    result.add(currentBoard.getCurrentCoordinate());
                     currentBoard = currentBoard.getParentBoard();
                 }
                 return result;
             }
-    
+
             for (int i = 1; i < 9; i++) {
                 tempBoard = currentBoard.moveBoardNew(i);
                 if (tempBoard != null) {
 
-                    if (method.equals("a")) {
-                        ((Queue<Board>) collection).add(tempBoard);
-                    } 
-                    else {
-                        ((Stack<Board>) collection).push(tempBoard);
-                    }
+                    collection.add(tempBoard);
                     openedNodes++;
                 }
             }
         }
-    
+
         return null;
     }
-
 
     protected class InterruptTimerTask extends TimerTask {
 

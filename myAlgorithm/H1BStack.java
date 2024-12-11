@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Stack;
 import java.util.Map;
 
-public class H1BQueue extends DFSQueue {
+public class H1BStack extends DFSStack {
 
-    H1BQueue(Stack<Board> boardList) {
+    H1BStack(Stack<Board> boardList) {
         super(boardList);
     }
 
@@ -14,7 +14,7 @@ public class H1BQueue extends DFSQueue {
     public void calculateNextBoards(Board currentBoard) {
         ArrayList<Map.Entry<Board, Integer>> tempList = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            Map.Entry<Board, Integer> result = currentBoard.moveBoardNewWithH1B(i);
+            Map.Entry<Board, Integer> result = currentBoard.createNextBoardH1B(i);
             if (result != null) {
                 tempList.add(result);
             }

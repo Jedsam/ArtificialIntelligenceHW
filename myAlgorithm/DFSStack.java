@@ -2,10 +2,10 @@ package myAlgorithm;
 
 import java.util.Stack;
 
-public class DFSQueue implements MyQueue {
+public class DFSStack implements MyQueue {
     Stack<Board> boardList;
 
-    DFSQueue(Stack<Board> boardList) {
+    DFSStack(Stack<Board> boardList) {
         this.boardList = boardList;
     }
 
@@ -18,7 +18,7 @@ public class DFSQueue implements MyQueue {
     public void calculateNextBoards(Board currentBoard) {
         Board tempBoard;
         for (int i = 1; i < 9; i++) {
-            tempBoard = currentBoard.moveBoardNew(i);
+            tempBoard = currentBoard.createNextBoard(i);
             if (tempBoard != null) {
 
                 this.add(tempBoard);

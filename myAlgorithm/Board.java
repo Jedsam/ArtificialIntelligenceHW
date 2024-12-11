@@ -62,11 +62,11 @@ public class Board {
         return convertPositionToCoordinate(this.currentPosition);
     }
 
-    private int calculateMove(int moveNumber) {
-        return calculateMove(moveNumber, currentPosition);
+    private int calculateNextPosition(int moveNumber) {
+        return calculateNextPosition(moveNumber, currentPosition);
     }
 
-    private int calculateMove(int moveNumber, int currentPositionTemp) {
+    private int calculateNextPosition(int moveNumber, int currentPositionTemp) {
         int returnVal;
         int column = (currentPositionTemp % boardSize) + 1; // starting from 1
         switch (moveNumber) {
@@ -102,20 +102,9 @@ public class Board {
 
     }
 
-    public boolean moveBoard(int moveNumber) {
+    public Board createNextBoard(int moveNumber) {
 
-        moveNumber = calculateMove(moveNumber);
-
-        if (moveNumber < 0 || board.get(moveNumber) || moveNumber >= tileCount) {
-            return false;
-        }
-        movePosition(moveNumber);
-        return true;
-    }
-
-    public Board moveBoardNew(int moveNumber) {
-
-        moveNumber = calculateMove(moveNumber);
+        moveNumber = calculateNextPosition(moveNumber);
 
         if (moveNumber < 0 || board.get(moveNumber) || moveNumber >= tileCount) {
             return null;
@@ -126,11 +115,11 @@ public class Board {
         return newBoard;
     }
 
-    public Map.Entry<Board, Integer> moveBoardNewWithH1B(int moveNumber) {
+    public Map.Entry<Board, Integer> createNextBoardH1B(int moveNumber) {
 
-        int newPosition = calculateMove(moveNumber);
+        int newPosition = calculateNextPosition(moveNumber);
 
-        int heuristicVal = calculateH1B(newPosition);
+        int heuristicVal = calculateH1BHeuristic(newPosition);
         if (newPosition < 0 || board.get(newPosition) || newPosition >= tileCount ||
                 (heuristicVal == 0 && board.cardinality() > tileCount)) {
             return null;
@@ -141,11 +130,11 @@ public class Board {
         return Map.entry(newBoard, heuristicVal);
     }
 
-    private int calculateH1B(int newPosition) {
+    private int calculateH1BHeuristic(int newPosition) {
         int heuristic = 0;
         int calcPosition;
         for (int i = 1; i < 9; i++) {
-            calcPosition = calculateMove(i, newPosition);
+            calcPosition = calculateNextPosition(i, newPosition);
             if (calcPosition < 0 || board.get(calcPosition) || calcPosition >= tileCount) {
                 continue;
             }
@@ -155,7 +144,7 @@ public class Board {
     }
 
     private String convertPositionToCoordinate(int position) {
-        return "" + (char) ((int) 'a' + position % boardSize) + (1 + (position / boardSize)) + " ";
+        return "" + (1 + position % boardSize) + "-" + (1 + (position / boardSize)) + " ";
     }
 
     private void movePosition(int newPosition) {

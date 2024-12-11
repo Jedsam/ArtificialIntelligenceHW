@@ -18,7 +18,7 @@ public class BFSQueue implements MyQueue {
     public void calculateNextBoards(Board currentBoard){
         Board tempBoard;
         for (int i = 1; i < 9; i++) {
-            tempBoard = currentBoard.moveBoardNew(i);
+            tempBoard = currentBoard.createNextBoard(i);
             if (tempBoard != null) {
 
                 this.add(tempBoard);

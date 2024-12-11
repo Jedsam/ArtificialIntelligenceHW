@@ -90,15 +90,15 @@ public class search {
             myQueue = (MyQueue) (new BFSQueue(tempQueue));
         } else if (method.equals("b")) {
             Stack<Board> tempStack = new Stack<Board>();
-            myQueue = (MyQueue) (new DFSQueue(tempStack));
+            myQueue = (MyQueue) (new DFSStack(tempStack));
         } else if (method.equals("c")) {
 
             Stack<Board> tempStack = new Stack<Board>();
-            myQueue = (MyQueue) (new H1BQueue(tempStack));
+            myQueue = (MyQueue) (new H1BStack(tempStack));
         } else {
 
             Stack<Board> tempStack = new Stack<Board>();
-            myQueue = (MyQueue) (new H2Queue(tempStack));
+            myQueue = (MyQueue) (new H2Stack(tempStack));
         }
         myQueue.add(board);
         return SearchBoard(myQueue);

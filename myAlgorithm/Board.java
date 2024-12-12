@@ -11,14 +11,14 @@ public class Board {
     private int currentPosition;
     private Board parentBoard;
 
-    public static void start(int boardSize) {
+    public static void start(int boardsize) {
+        boardSize = boardsize;
         tileCount = boardSize * boardSize;
     }
 
-    Board(int boardsize) {
-        this.board = new BitSet(boardsize * boardsize);
+    Board() {
+        this.board = new BitSet(boardSize * boardSize);
         this.parentBoard = null;
-        boardSize = boardsize;
 
         setStartingPosition(0);
     }
@@ -29,9 +29,9 @@ public class Board {
         this.parentBoard = parent;
     }
 
-    private void setStartingPosition(int statingPosition) {
-        this.board.set(statingPosition);
-        currentPosition = statingPosition;
+    private void setStartingPosition(int startingPosition) {
+        this.board.set(startingPosition);
+        currentPosition = startingPosition;
     }
 
     public Board getParentBoard() {
@@ -42,10 +42,8 @@ public class Board {
         return new Board((BitSet) this.board.clone(), this.currentPosition, this.parentBoard);
     }
 
-    public boolean isDone() {
-        int size = board.cardinality();
-        boolean result = size >= tileCount;
-        return result;
+    public boolean isDone() {   // Returns true if all tiles are visited
+        return board.cardinality() >= tileCount;    
     }
 
     public int getCurrentPosition() {
@@ -142,25 +140,33 @@ public class Board {
     public int h2Compare(Board board) {
         if (this.lengthFromCorner() > board.lengthFromCorner())
             return 1;
-        else
+        else if (this.lengthFromCorner() < board.lengthFromCorner())
             return -1;
-
+        else 
+            return 0;
     }
 
     private double lengthFromCorner() {     // Calculates the distance from the corner
         int row = this.currentPosition / boardSize + 1;
         int column = this.currentPosition % boardSize + 1;
 
-        if (row >= boardSize / 2)
+        if ((row - 1) > boardSize - row)
             row = boardSize - row;
-        if (column >= boardSize / 2)
+        else {
+            row = row - 1;
+        }
+
+        if ((column - 1) > boardSize - column)
             column = boardSize - column;
+        else {
+            column = column - 1;
+        }
 
         return Math.sqrt(column * column + row * row);
     }
 
     private String convertPositionToCoordinate(int position) {  // Converts position to coordinate
-        return "" + (1 + position % boardSize) + "-" + (1 + (position / boardSize)) + " ";
+        return (1 + position % boardSize) + "-" + (1 + (position / boardSize)) + " ";
     }
 
     private void movePosition(int newPosition) {    // Moves the board to the new position

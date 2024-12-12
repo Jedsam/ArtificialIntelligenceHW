@@ -11,7 +11,9 @@ public class H2Stack extends DFSStack {
     }
 
     @Override
-    public void calculateNextBoards(Board currentBoard) {
+    public void calculateNextBoards(Board currentBoard) {   // method for create next board and add to the stack for h2
+        
+        // list of board and heuristic value couples 
         ArrayList<Map.Entry<Board, Integer>> tempList = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
             Map.Entry<Board, Integer> result = currentBoard.createNextBoardWithH1B(i);
@@ -20,7 +22,7 @@ public class H2Stack extends DFSStack {
             }
         }
 
-        tempList.sort(((a, b) -> {
+        tempList.sort(((a, b) -> {  // sort the list based on heuristic
             int temp = b.getValue() - a.getValue();
             if (temp == 0) {
                 return b.getKey().h2Compare(a.getKey());
@@ -29,7 +31,7 @@ public class H2Stack extends DFSStack {
             }
         }));
         for (Map.Entry<Board, Integer> result : tempList) {
-            this.add(result.getKey()); // take board with getKey()
+            this.add(result.getKey()); // take board with getKey() and add to the stack
             search.openedNodes++;
         }
     }

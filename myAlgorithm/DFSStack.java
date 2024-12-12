@@ -10,12 +10,7 @@ public class DFSStack implements MyQueue {
     }
 
     @Override
-    public void add(Board board) {
-        boardList.push(board);
-    }
-
-    @Override
-    public void calculateNextBoards(Board currentBoard) {
+    public void calculateNextBoards(Board currentBoard) {   // method for create next board and add to the stack for DFS
         Board tempBoard;
         for (int i = 1; i < 9; i++) {
             tempBoard = currentBoard.createNextBoard(i);
@@ -25,6 +20,11 @@ public class DFSStack implements MyQueue {
                 search.openedNodes++;
             }
         }
+    }
+
+    @Override
+    public void add(Board board) {
+        boardList.push(board);
     }
 
     @Override

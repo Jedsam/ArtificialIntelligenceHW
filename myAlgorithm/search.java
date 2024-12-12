@@ -22,8 +22,6 @@ public class search {
 
     public static void main(String[] args) {
 
-        
-
         PrintWriter writer;
         try {
             writer = new PrintWriter("output.txt");
@@ -33,14 +31,15 @@ public class search {
 
         } 
         // Taking input from user
-        System.out.println("Enter the board size: ");
+        System.out.print("Enter the board size: ");
         Scanner input = new Scanner(System.in);
         int boardSize = input.nextInt();
-        System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2): ");
+        System.out.print("Enter the method(a=BFS, b=DFS, c=h1b, d=h2): ");
         char method = input.next().charAt(0);
-        System.out.println("Enter the time limit in minutes: ");
+        System.out.print("Enter the time limit in minutes: ");
         int timeLimit = input.nextInt();
-
+        System.out.print("\n");
+        
         long start_time = System.currentTimeMillis();
         ArrayList<String> result;
 
@@ -49,7 +48,7 @@ public class search {
         long end_time = System.currentTimeMillis();
         if (result != null)
             Collections.reverse(result);
-        System.out.println("Run time of the algorithm " + (end_time - start_time) + "miliseconds");
+        System.out.println("Run time of the algorithm: " + (end_time - start_time) + " miliseconds");
         if (result == null) {
             System.out.println("No result found");
         } else {
@@ -59,14 +58,13 @@ public class search {
             }
             System.out.println("Opened nodes: " + openedNodes);
         }
-        // 8, 16, 32, 41, 52 sizes
         input.close();
         writer.close();
     }
 
     private static ArrayList<String> startSearch(int boardSize, String method, int timeLimit) {
-        Board.start(boardSize); // set up variables
-        Board board = new Board(boardSize);
+        Board.start(boardSize); // set up static variables
+        Board board = new Board();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -103,21 +101,21 @@ public class search {
     }
 
     private static ArrayList<String> startSearchBoard(Board board, String method) {
-        MyQueue myQueue;
-        if (method.equals("a")) {
+        MyQueue myQueue;    // a class to use queue or stack with polymorphism
+        if (method.equals("a")) {                   // BFS
             Queue<Board> tempQueue = new LinkedList<Board>();
             myQueue = (MyQueue) (new BFSQueue(tempQueue));
-        } else if (method.equals("b")) {
+        } else if (method.equals("b")) {            // DFS
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new DFSStack(tempStack));
-        } else if (method.equals("c")) {
+        } else if (method.equals("c")) {            // h1b
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new H1BStack(tempStack));
-        } else {
+        } else {                                            // h2
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new H2Stack(tempStack));
         }
-        myQueue.add(board);
+        myQueue.add(board);     // add the initial board to the queue
         return SearchBoard(myQueue);
     }
 
@@ -125,7 +123,7 @@ public class search {
         Board currentBoard;
         while (!myBoardQueue.isEmpty()) {
 
-            currentBoard = myBoardQueue.get();
+            currentBoard = myBoardQueue.get();  
 
             if (currentBoard.isDone()) {
                 ArrayList<String> result = new ArrayList<>();

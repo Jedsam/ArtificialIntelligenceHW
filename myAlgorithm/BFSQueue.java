@@ -10,12 +10,7 @@ public class BFSQueue implements MyQueue {
     }
 
     @Override
-    public void add(Board board) {
-        boardList.add(board);
-    }
-
-    @Override
-    public void calculateNextBoards(Board currentBoard){
+    public void calculateNextBoards(Board currentBoard){    // method for create next board and add to the queue
         Board tempBoard;
         for (int i = 1; i < 9; i++) {
             tempBoard = currentBoard.createNextBoard(i);
@@ -27,6 +22,11 @@ public class BFSQueue implements MyQueue {
         }
     }
     
+    @Override
+    public void add(Board board) {
+        boardList.add(board);
+    }
+
     @Override
     public Board get() {
         return boardList.poll();

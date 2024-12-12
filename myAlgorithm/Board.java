@@ -114,7 +114,7 @@ public class Board {
 
         int heuristicVal = calculateH1BHeuristic(newPosition);
         if (newPosition < 0 || board.get(newPosition) || newPosition >= tileCount ||
-                (heuristicVal == 0 && board.cardinality() > tileCount)) {
+                (heuristicVal == 0 && board.cardinality() >= tileCount)) {
             return null;
         }
         Board newBoard = clone();
@@ -136,11 +136,14 @@ public class Board {
         return heuristic;
     }
 
-    // Returns 1 for true -1 for false
+    // Returns 1 for true -1 for false and 0 for equality
     public int h2Compare(Board board) {
-        if (this.lengthFromCorner() > board.lengthFromCorner())
+        double thisDistance = this.lengthFromCorner();
+        double boardDistance = board.lengthFromCorner();
+
+        if (thisDistance > boardDistance)
             return 1;
-        else if (this.lengthFromCorner() < board.lengthFromCorner())
+        else if (thisDistance < boardDistance)
             return -1;
         else 
             return 0;

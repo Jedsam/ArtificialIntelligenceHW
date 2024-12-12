@@ -1,11 +1,6 @@
 package myAlgorithm;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +22,7 @@ public class search {
 
     public static void main(String[] args) {
 
-        long start_time = System.currentTimeMillis();
+        
 
         PrintWriter writer;
         try {
@@ -35,14 +30,18 @@ public class search {
         } catch (IOException e) {
             e.printStackTrace();
             return;
-        } // For taking input from user
-        System.out.println("Enter the board size: "); // Commented out for easy
+
+        } 
+        // Taking input from user
+        System.out.println("Enter the board size: ");
         Scanner input = new Scanner(System.in);
         int boardSize = input.nextInt();
         System.out.println("Enter the method(a=BFS, b=DFS, c=h1b, d=h2): ");
         char method = input.next().charAt(0);
         System.out.println("Enter the time limit in minutes: ");
         int timeLimit = input.nextInt();
+
+        long start_time = System.currentTimeMillis();
         ArrayList<String> result;
 
         result = startSearch(boardSize, String.valueOf(method), timeLimit);

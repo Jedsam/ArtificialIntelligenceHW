@@ -14,7 +14,7 @@ public class H1BStack extends DFSStack {
     public void calculateNextBoards(Board currentBoard) {
         ArrayList<Map.Entry<Board, Integer>> tempList = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            Map.Entry<Board, Integer> result = currentBoard.createNextBoardH(i);
+            Map.Entry<Board, Integer> result = currentBoard.createNextBoardWithH1B(i);
             if (result != null) {
                 tempList.add(result);
             }

@@ -42,8 +42,8 @@ public class Board {
         return new Board((BitSet) this.board.clone(), this.currentPosition, this.parentBoard);
     }
 
-    public boolean isDone() {   // Returns true if all tiles are visited
-        return board.cardinality() >= tileCount;    
+    public boolean isDone() { // Returns true if all tiles are visited
+        return board.cardinality() >= tileCount;
     }
 
     public int getCurrentPosition() {
@@ -54,12 +54,14 @@ public class Board {
         return convertPositionToCoordinate(this.currentPosition);
     }
 
-    private int calculateNextPosition(int moveNumber) {     // for using this method with currentposition
+    private int calculateNextPosition(int moveNumber) { // for using this method with currentposition
         return calculateNextPosition(moveNumber, currentPosition);
     }
 
-    // Calculates the next position based on the move number (from paper) and position
-    private int calculateNextPosition(int moveNumber, int currentPositionTemp) {    // for using this method with any position(used in h1b)
+    // Calculates the next position based on the move number (from paper) and
+    // position
+    private int calculateNextPosition(int moveNumber, int currentPositionTemp) { // for using this method with any
+                                                                                 // position(used in h1b)
         int returnVal;
         int column = (currentPositionTemp % boardSize) + 1; // starting from 1
         switch (moveNumber) {
@@ -95,7 +97,7 @@ public class Board {
 
     }
 
-    public Board createNextBoard(int moveNumber) {  // Creates next board based on the move number 
+    public Board createNextBoard(int moveNumber) { // Creates next board based on the move number
 
         int newPosition = calculateNextPosition(moveNumber);
 
@@ -108,7 +110,8 @@ public class Board {
         return newBoard;
     }
 
-    public Map.Entry<Board, Integer> createNextBoardWithH1B(int moveNumber) {   // Creates next board based on the move number with h1b heuristic
+    public Map.Entry<Board, Integer> createNextBoardWithH1B(int moveNumber) { // Creates next board based on the move
+                                                                              // number with h1b heuristic
 
         int newPosition = calculateNextPosition(moveNumber);
 
@@ -123,7 +126,7 @@ public class Board {
         return Map.entry(newBoard, heuristicVal);
     }
 
-    private int calculateH1BHeuristic(int newPosition) {    // Calculates possible move count from the new position
+    private int calculateH1BHeuristic(int newPosition) { // Calculates possible move count from the new position
         int heuristic = 0;
         int calcPosition;
         for (int i = 1; i < 9; i++) {
@@ -137,19 +140,21 @@ public class Board {
     }
 
     // Returns 1 for true -1 for false and 0 for equality
-    /*public int h2Compare(Board board) {
-        double thisDistance = this.lengthFromCorner();
-        double boardDistance = board.lengthFromCorner();
+    /*
+     * public int h2Compare(Board board) {
+     * double thisDistance = this.lengthFromCorner();
+     * double boardDistance = board.lengthFromCorner();
+     * 
+     * if (thisDistance > boardDistance)
+     * return 1;
+     * else if (thisDistance < boardDistance)
+     * return -1;
+     * else
+     * return 0;
+     * }
+     */
 
-        if (thisDistance > boardDistance)
-            return 1;
-        else if (thisDistance < boardDistance)
-            return -1;
-        else 
-            return 0;
-    }*/
-
-    public double lengthFromCorner() {     // Calculates the distance from the corner
+    public double lengthFromCorner() { // Calculates the distance from the corner
         int row = this.currentPosition / boardSize + 1;
         int column = this.currentPosition % boardSize + 1;
 
@@ -165,14 +170,14 @@ public class Board {
             column = column - 1;
         }
 
-        return Math.sqrt(column * column + row * row);
+        return column + row;
     }
 
-    private String convertPositionToCoordinate(int position) {  // Converts position to coordinate
+    private String convertPositionToCoordinate(int position) { // Converts position to coordinate
         return (1 + (position % boardSize)) + "-" + (1 + (position / boardSize)) + " ";
     }
 
-    private void movePosition(int newPosition) {    // Moves the board to the new position
+    private void movePosition(int newPosition) { // Moves the board to the new position
         currentPosition = newPosition;
         board.set(newPosition);
     }

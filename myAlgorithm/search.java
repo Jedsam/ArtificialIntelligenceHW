@@ -29,7 +29,7 @@ public class search {
             e.printStackTrace();
             return;
 
-        } 
+        }
         // Taking input from user
         System.out.print("Enter the board size: ");
         Scanner input = new Scanner(System.in);
@@ -39,7 +39,7 @@ public class search {
         System.out.print("Enter the time limit in minutes: ");
         int timeLimit = input.nextInt();
         System.out.print("\n");
-        
+
         long start_time = System.currentTimeMillis();
         ArrayList<String> result;
 
@@ -81,18 +81,21 @@ public class search {
 
         try {
             // Wait for the function to complete, or timeout after the specified time limit
-            return future.get(timeLimit, TimeUnit.MINUTES);
+            return future.get(timeLimit, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
             System.out.println("Timeout.");
             future.cancel(true); // Cancel the task
             return null; // Return null if timeout occurs
-        } catch (OutOfMemoryError e) {
-            System.out.println("Out of Memory");
-            return null;
         } catch (InterruptedException e) {
             e.printStackTrace();
             return null;
         } catch (ExecutionException e) {
+
+            Throwable errorType = e.getCause();
+            if (errorType instanceof OutOfMemoryError) {
+                System.out.println("Out of Memory");
+                return null;
+            }
             e.printStackTrace();
             return null;
         } finally {
@@ -101,21 +104,21 @@ public class search {
     }
 
     private static ArrayList<String> startSearchBoard(Board board, String method) {
-        MyQueue myQueue;    // a class to use queue or stack with polymorphism
-        if (method.equals("a")) {                   // BFS
+        MyQueue myQueue; // a class to use queue or stack with polymorphism
+        if (method.equals("a")) { // BFS
             Queue<Board> tempQueue = new LinkedList<Board>();
             myQueue = (MyQueue) (new BFSQueue(tempQueue));
-        } else if (method.equals("b")) {            // DFS
+        } else if (method.equals("b")) { // DFS
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new DFSStack(tempStack));
-        } else if (method.equals("c")) {            // h1b
+        } else if (method.equals("c")) { // h1b
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new H1BStack(tempStack));
-        } else {                                            // h2
+        } else { // h2
             Stack<Board> tempStack = new Stack<Board>();
             myQueue = (MyQueue) (new H2Stack(tempStack));
         }
-        myQueue.add(board);     // add the initial board to the queue
+        myQueue.add(board); // add the initial board to the queue
         return SearchBoard(myQueue);
     }
 
@@ -123,7 +126,7 @@ public class search {
         Board currentBoard;
         while (!myBoardQueue.isEmpty()) {
 
-            currentBoard = myBoardQueue.get();  
+            currentBoard = myBoardQueue.get();
 
             if (currentBoard.isDone()) {
                 ArrayList<String> result = new ArrayList<>();

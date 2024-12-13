@@ -17,7 +17,6 @@ public class DFSStack implements MyQueue {
             if (tempBoard != null) {
 
                 this.add(tempBoard);
-                search.openedNodes++;
             }
         }
     }
@@ -29,6 +28,7 @@ public class DFSStack implements MyQueue {
 
     @Override
     public Board get() {
+        search.openedNodes++;
         return boardList.pop();
     }
 

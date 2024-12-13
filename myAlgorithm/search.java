@@ -18,7 +18,7 @@ import java.util.concurrent.TimeoutException;
 
 public class search {
 
-    public static long openedNodes = 1;
+    public static long openedNodes = 0;
 
     public static void main(String[] args) {
 

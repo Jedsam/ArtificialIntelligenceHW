@@ -17,7 +17,6 @@ public class BFSQueue implements MyQueue {
             if (tempBoard != null) {
 
                 this.add(tempBoard);
-                search.openedNodes++;
             }
         }
     }
@@ -29,6 +28,7 @@ public class BFSQueue implements MyQueue {
 
     @Override
     public Board get() {
+        search.openedNodes++;
         return boardList.poll();
     }
 

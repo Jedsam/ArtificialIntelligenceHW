@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Stack;
 
 public class H2Stack extends DFSStack {
-
     H2Stack(Stack<Board> boardList) {
         super(boardList);
     }
@@ -22,17 +21,17 @@ public class H2Stack extends DFSStack {
             }
         }
 
-        tempList.sort(((a, b) -> {  // sort the list based on heuristic
-            int temp = b.getValue() - a.getValue();
-            if (temp == 0) {
-                return b.getKey().h2Compare(a.getKey());
-            } else {
-                return temp;
+        
+        tempList.sort((a, b) -> {
+            int compareByValue = Integer.compare(b.getValue(), a.getValue());
+            if (compareByValue != 0) {
+                return compareByValue;
             }
-        }));
+            return Double.compare(b.getKey().lengthFromCorner(), a.getKey().lengthFromCorner());
+        });
+        
         for (Map.Entry<Board, Integer> result : tempList) {
             this.add(result.getKey()); // take board with getKey() and add to the stack
-            search.openedNodes++;
         }
     }
 

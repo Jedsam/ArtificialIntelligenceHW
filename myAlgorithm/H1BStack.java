@@ -25,7 +25,6 @@ public class H1BStack extends DFSStack {
         tempList.sort((a, b) -> b.getValue() - a.getValue());   // sort the list based on heuristic values
         for (Map.Entry<Board, Integer> result : tempList) {
             this.add(result.getKey()); // take board with getKey() and add to the stack
-            search.openedNodes++;
         }
     }
 }

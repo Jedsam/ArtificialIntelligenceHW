@@ -137,7 +137,7 @@ public class Board {
     }
 
     // Returns 1 for true -1 for false and 0 for equality
-    public int h2Compare(Board board) {
+    /*public int h2Compare(Board board) {
         double thisDistance = this.lengthFromCorner();
         double boardDistance = board.lengthFromCorner();
 
@@ -147,9 +147,9 @@ public class Board {
             return -1;
         else 
             return 0;
-    }
+    }*/
 
-    private double lengthFromCorner() {     // Calculates the distance from the corner
+    public double lengthFromCorner() {     // Calculates the distance from the corner
         int row = this.currentPosition / boardSize + 1;
         int column = this.currentPosition % boardSize + 1;
 
@@ -169,7 +169,7 @@ public class Board {
     }
 
     private String convertPositionToCoordinate(int position) {  // Converts position to coordinate
-        return (1 + position % boardSize) + "-" + (1 + (position / boardSize)) + " ";
+        return (1 + (position % boardSize)) + "-" + (1 + (position / boardSize)) + " ";
     }
 
     private void movePosition(int newPosition) {    // Moves the board to the new position

@@ -9,7 +9,7 @@ public class Node {
 
     private BitSet board;
     private int currentPosition;
-    private Node parentBoard;
+    private Node parentNode;
 
     public static void start(int boardsize) {
         boardSize = boardsize;
@@ -18,7 +18,7 @@ public class Node {
 
     Node() {
         this.board = new BitSet(boardSize * boardSize);
-        this.parentBoard = null;
+        this.parentNode = null;
 
         setStartingPosition(0);
     }
@@ -26,7 +26,7 @@ public class Node {
     Node(BitSet board, int currentPosition, Node parent) {
         this.board = board;
         this.currentPosition = currentPosition;
-        this.parentBoard = parent;
+        this.parentNode = parent;
     }
 
     private void setStartingPosition(int startingPosition) {
@@ -34,12 +34,12 @@ public class Node {
         currentPosition = startingPosition;
     }
 
-    public Node getParentBoard() {
-        return parentBoard;
+    public Node getParentNode() {
+        return parentNode;
     }
 
     public Node clone() {
-        return new Node((BitSet) this.board.clone(), this.currentPosition, this.parentBoard);
+        return new Node((BitSet) this.board.clone(), this.currentPosition, this.parentNode);
     }
 
     public boolean isDone() { // Returns true if all tiles are visited
@@ -105,7 +105,7 @@ public class Node {
             return null;
         }
         Node newBoard = clone();
-        newBoard.parentBoard = this;
+        newBoard.parentNode = this;
         newBoard.movePosition(newPosition);
         return newBoard;
     }
@@ -121,7 +121,7 @@ public class Node {
             return null;
         }
         Node newBoard = clone();
-        newBoard.parentBoard = this;
+        newBoard.parentNode = this;
         newBoard.movePosition(newPosition);
         return Map.entry(newBoard, heuristicVal);
     }

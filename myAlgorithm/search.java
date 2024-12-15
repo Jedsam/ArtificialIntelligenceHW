@@ -134,7 +134,7 @@ public class Search {
                 ArrayList<String> result = new ArrayList<>();
                 while (currentBoard != null) {
                     result.add(currentBoard.getCurrentCoordinate());
-                    currentBoard = currentBoard.getParentBoard();
+                    currentBoard = currentBoard.getParentNode();
                 }
                 return result;
             }

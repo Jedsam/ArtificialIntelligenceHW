@@ -28,7 +28,7 @@ public class DFSStack implements MyQueue {
 
     @Override
     public Board get() {
-        Search.openedNodes++;
+        Search.expandedNodes++;
         return boardList.pop();
     }
 

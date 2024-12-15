@@ -18,7 +18,7 @@ import java.util.concurrent.TimeoutException;
 
 public class Search {
 
-    public static long openedNodes = 0;
+    public static long expandedNodes = 0;
 
     public static void main(String[] args) {
 
@@ -57,7 +57,7 @@ public class Search {
             for (String string : result) {
                 writer.println(string);
             }
-            System.out.println("Opened nodes: " + openedNodes);
+            System.out.println("Number of expanded nodes: " + expandedNodes);
         }
         input.close();
         writer.close();
@@ -104,7 +104,8 @@ public class Search {
         }
     }
 
-    private static ArrayList<String> startSearchBoard(Board board, String method) { // setup froniter based on search method
+    private static ArrayList<String> startSearchBoard(Board board, String method) { // setup froniter based on search
+                                                                                    // method
         MyQueue frontier; // a class to use queue or stack with polymorphism
         if (method.equals("a")) { // BFS
             Queue<Board> tempQueue = new LinkedList<Board>();
@@ -123,7 +124,7 @@ public class Search {
         return searchBoard(frontier);
     }
 
-    private static ArrayList<String> searchBoard(MyQueue frontier) {    //tree search method
+    private static ArrayList<String> searchBoard(MyQueue frontier) { // tree search method
         Board currentBoard;
         while (!frontier.isEmpty()) {
 

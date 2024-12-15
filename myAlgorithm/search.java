@@ -50,7 +50,7 @@ public class Search {
             Collections.reverse(result);
         System.out.println("Run time of the algorithm: " + (end_time - start_time) + " miliseconds");
         if (result == null) {
-            System.out.println("No result found");
+            System.out.println("No solution exists");
             System.exit(0);
         } else {
             System.out.println("A solution found.");

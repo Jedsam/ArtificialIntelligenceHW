@@ -174,7 +174,7 @@ public class Board {
     }
 
     private String convertPositionToCoordinate(int position) { // Converts position to coordinate
-        return (1 + (position % boardSize)) + "-" + (1 + (position / boardSize)) + " ";
+        return ((position % boardSize)) + "-" + ((position / boardSize)) + " ";
     }
 
     private void movePosition(int newPosition) { // Moves the board to the new position

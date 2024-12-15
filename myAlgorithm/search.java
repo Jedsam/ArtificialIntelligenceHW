@@ -104,29 +104,29 @@ public class search {
     }
 
     private static ArrayList<String> startSearchBoard(Board board, String method) {
-        MyQueue myQueue; // a class to use queue or stack with polymorphism
+        MyQueue frontier; // a class to use queue or stack with polymorphism
         if (method.equals("a")) { // BFS
             Queue<Board> tempQueue = new LinkedList<Board>();
-            myQueue = (MyQueue) (new BFSQueue(tempQueue));
+            frontier = (MyQueue) (new BFSQueue(tempQueue));
         } else if (method.equals("b")) { // DFS
             Stack<Board> tempStack = new Stack<Board>();
-            myQueue = (MyQueue) (new DFSStack(tempStack));
+            frontier = (MyQueue) (new DFSStack(tempStack));
         } else if (method.equals("c")) { // h1b
             Stack<Board> tempStack = new Stack<Board>();
-            myQueue = (MyQueue) (new H1BStack(tempStack));
+            frontier = (MyQueue) (new H1BStack(tempStack));
         } else { // h2
             Stack<Board> tempStack = new Stack<Board>();
-            myQueue = (MyQueue) (new H2Stack(tempStack));
+            frontier = (MyQueue) (new H2Stack(tempStack));
         }
-        myQueue.add(board); // add the initial board to the queue
-        return SearchBoard(myQueue);
+        frontier.add(board); // add the initial board to the queue
+        return SearchBoard(frontier);
     }
 
-    private static ArrayList<String> SearchBoard(MyQueue myBoardQueue) {
+    private static ArrayList<String> SearchBoard(MyQueue frontier) {
         Board currentBoard;
-        while (!myBoardQueue.isEmpty()) {
+        while (!frontier.isEmpty()) {
 
-            currentBoard = myBoardQueue.get();
+            currentBoard = frontier.get();
 
             if (currentBoard.isDone()) {
                 ArrayList<String> result = new ArrayList<>();
@@ -136,7 +136,7 @@ public class search {
                 }
                 return result;
             }
-            myBoardQueue.calculateNextBoards(currentBoard);
+            frontier.calculateNextBoards(currentBoard);
 
         }
         return null;

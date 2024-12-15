@@ -81,7 +81,7 @@ public class Search {
 
         try {
             // Wait for the function to complete, or timeout after the specified time limit
-            return future.get(timeLimit, TimeUnit.SECONDS);
+            return future.get(timeLimit, TimeUnit.MINUTES);
         } catch (TimeoutException e) {
             System.out.println("Timeout.");
             future.cancel(true); // Cancel the task

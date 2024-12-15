@@ -119,10 +119,10 @@ public class Search {
             frontier = (MyQueue) (new H2Stack(tempStack));
         }
         frontier.add(board); // add the initial board to the queue
-        return SearchBoard(frontier);
+        return searchBoard(frontier);
     }
 
-    private static ArrayList<String> SearchBoard(MyQueue frontier) {    //tree search method
+    private static ArrayList<String> searchBoard(MyQueue frontier) {    //tree search method
         Board currentBoard;
         while (!frontier.isEmpty()) {
 

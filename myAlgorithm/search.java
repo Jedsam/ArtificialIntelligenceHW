@@ -138,7 +138,7 @@ public class Search {
                 }
                 return result;
             }
-            frontier.calculateNextBoards(currentBoard);
+            frontier.calculateAndAddNextBoards(currentBoard);
 
         }
         return null;

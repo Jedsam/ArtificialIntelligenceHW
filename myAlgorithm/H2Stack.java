@@ -10,7 +10,7 @@ public class H2Stack extends DFSStack {
     }
 
     @Override
-    public void calculateNextBoards(Board currentBoard) { // method for create next board and add to the stack for h2
+    public void calculateAndAddNextBoards(Board currentBoard) { // method for create next board and add to the stack for h2
 
         // list of board and heuristic value couples
         ArrayList<Map.Entry<Board, Integer>> tempList = new ArrayList<>();

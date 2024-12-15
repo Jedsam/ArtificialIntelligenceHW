@@ -57,15 +57,14 @@ public class Search {
             for (String string : result) {
                 writer.println(string);
             }
-            System.out.println("Number of expanded nodes: " + expandedNodes);
         }
         input.close();
         writer.close();
     }
 
     private static ArrayList<String> startSearch(int boardSize, String method, int timeLimit) {
-        Board.start(boardSize); // set up static variables
-        Board board = new Board();
+        Node.start(boardSize); // set up static variables
+        Node board = new Node();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -100,24 +99,25 @@ public class Search {
             e.printStackTrace();
             return null;
         } finally {
+            System.out.println("Number of expanded nodes: " + expandedNodes);
             executor.shutdownNow(); // Clean up the executor
         }
     }
 
-    private static ArrayList<String> startSearchBoard(Board board, String method) { // setup froniter based on search
+    private static ArrayList<String> startSearchBoard(Node board, String method) { // setup froniter based on search
                                                                                     // method
         MyQueue frontier; // a class to use queue or stack with polymorphism
         if (method.equals("a")) { // BFS
-            Queue<Board> tempQueue = new LinkedList<Board>();
+            Queue<Node> tempQueue = new LinkedList<Node>();
             frontier = (MyQueue) (new BFSQueue(tempQueue));
         } else if (method.equals("b")) { // DFS
-            Stack<Board> tempStack = new Stack<Board>();
+            Stack<Node> tempStack = new Stack<Node>();
             frontier = (MyQueue) (new DFSStack(tempStack));
         } else if (method.equals("c")) { // h1b
-            Stack<Board> tempStack = new Stack<Board>();
+            Stack<Node> tempStack = new Stack<Node>();
             frontier = (MyQueue) (new H1BStack(tempStack));
         } else { // h2
-            Stack<Board> tempStack = new Stack<Board>();
+            Stack<Node> tempStack = new Stack<Node>();
             frontier = (MyQueue) (new H2Stack(tempStack));
         }
         frontier.add(board); // add the initial board to the queue
@@ -125,7 +125,7 @@ public class Search {
     }
 
     private static ArrayList<String> searchBoard(MyQueue frontier) { // tree search method
-        Board currentBoard;
+        Node currentBoard;
         while (!frontier.isEmpty()) {
 
             currentBoard = frontier.get();

@@ -139,20 +139,6 @@ public class Board {
         return heuristic;
     }
 
-    // Returns 1 for true -1 for false and 0 for equality
-    /*
-     * public int h2Compare(Board board) {
-     * double thisDistance = this.lengthFromCorner();
-     * double boardDistance = board.lengthFromCorner();
-     * 
-     * if (thisDistance > boardDistance)
-     * return 1;
-     * else if (thisDistance < boardDistance)
-     * return -1;
-     * else
-     * return 0;
-     * }
-     */
 
     public double lengthFromCorner() { // Calculates the distance from the corner
         int row = this.currentPosition / boardSize + 1;

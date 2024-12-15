@@ -103,7 +103,7 @@ public class search {
         }
     }
 
-    private static ArrayList<String> startSearchBoard(Board board, String method) {
+    private static ArrayList<String> startSearchBoard(Board board, String method) { // setup froniter based on search method
         MyQueue frontier; // a class to use queue or stack with polymorphism
         if (method.equals("a")) { // BFS
             Queue<Board> tempQueue = new LinkedList<Board>();
@@ -122,7 +122,7 @@ public class search {
         return SearchBoard(frontier);
     }
 
-    private static ArrayList<String> SearchBoard(MyQueue frontier) {
+    private static ArrayList<String> SearchBoard(MyQueue frontier) {    //tree search method
         Board currentBoard;
         while (!frontier.isEmpty()) {
 

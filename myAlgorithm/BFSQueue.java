@@ -28,7 +28,7 @@ public class BFSQueue implements MyQueue {
 
     @Override
     public Board get() {
-        search.openedNodes++;
+        Search.openedNodes++;
         return boardList.poll();
     }
 

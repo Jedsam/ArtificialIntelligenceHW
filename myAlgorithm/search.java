@@ -16,7 +16,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class search {
+public class Search {
 
     public static long openedNodes = 0;
 

@@ -139,7 +139,6 @@ public class Board {
         return heuristic;
     }
 
-
     public double lengthFromCorner() { // Calculates the distance from the corner
         int row = this.currentPosition / boardSize + 1;
         int column = this.currentPosition % boardSize + 1;

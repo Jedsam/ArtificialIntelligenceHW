@@ -22,10 +22,24 @@ public class H1BStack extends DFSStack {
             }
         }
 
-        tempList.sort((a, b) -> b.getValue() - a.getValue()); // sort the list based on heuristic values
+        tempList.sort((a, b) -> Integer.compare(a.getValue(), b.getValue())); // sort the list based on heuristic values
 
+        if (!tempList.isEmpty()) {
+            tempList = reverseArrayList(tempList);
+        }
         for (Map.Entry<Board, Integer> result : tempList) {
             this.add(result.getKey()); // take board with getKey() and add to the stack
         }
+
+    }
+
+    private ArrayList<Map.Entry<Board, Integer>> reverseArrayList(ArrayList<Map.Entry<Board, Integer>> boardList) {
+        ArrayList<Map.Entry<Board, Integer>> reversedList = new ArrayList<Map.Entry<Board, Integer>>();
+
+        for (int i = boardList.size() - 1; i >= 0; i--) {
+            reversedList.add(boardList.get(i));
+        }
+
+        return reversedList;
     }
 }

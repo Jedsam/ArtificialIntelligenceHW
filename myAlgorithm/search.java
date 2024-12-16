@@ -19,6 +19,7 @@ import java.util.concurrent.TimeoutException;
 public class Search {
 
     public static long expandedNodes = 0;
+    public static boolean hasNoError = true;
 
     public static void main(String[] args) {
 
@@ -50,14 +51,16 @@ public class Search {
             Collections.reverse(result);
         System.out.println("Run time of the algorithm: " + (end_time - start_time) + " miliseconds");
         if (result == null) {
-            System.out.println("No solution exists");
+            if (hasNoError)
+                System.out.println("No solution exists");
+            input.close();
+            writer.close();
             System.exit(0);
         } else {
             System.out.println("A solution found.");
             for (String string : result) {
                 writer.println(string);
             }
-            System.out.println("Number of expanded nodes: " + expandedNodes);
         }
         input.close();
         writer.close();
@@ -75,6 +78,7 @@ public class Search {
                 return startSearchBoard(board, method);
             } finally {
                 if (Thread.currentThread().isInterrupted()) {
+                    hasNoError = false;
                     System.out.println("Function was interrupted");
                 }
             }
@@ -84,14 +88,16 @@ public class Search {
             // Wait for the function to complete, or timeout after the specified time limit
             return future.get(timeLimit, TimeUnit.MINUTES);
         } catch (TimeoutException e) {
+            hasNoError = false;
             System.out.println("Timeout.");
             future.cancel(true); // Cancel the task
             return null; // Return null if timeout occurs
         } catch (InterruptedException e) {
+            hasNoError = false;
             e.printStackTrace();
             return null;
         } catch (ExecutionException e) {
-
+            hasNoError = false;
             Throwable errorType = e.getCause();
             if (errorType instanceof OutOfMemoryError) {
                 System.out.println("Out of Memory");
@@ -100,6 +106,8 @@ public class Search {
             e.printStackTrace();
             return null;
         } finally {
+
+            System.out.println("Number of expanded nodes: " + expandedNodes);
             executor.shutdownNow(); // Clean up the executor
         }
     }

@@ -3,17 +3,17 @@ package myAlgorithm;
 import java.util.Stack;
 
 public class DFSStack implements MyQueue {
-    Stack<Board> boardList;
+    Stack<Node> boardList;
 
-    DFSStack(Stack<Board> boardList) {
+    DFSStack(Stack<Node> boardList) {
         this.boardList = boardList;
     }
 
     @Override
-    public void calculateAndAddNextBoards(Board currentBoard) {   // method for create next board and add to the stack for DFS
-        Board tempBoard;
+    public void calculateAndAddNextBoards(Node currentBoard) {   // method for create next board and add to the stack for DFS
+        Node tempBoard;
         for (int i = 1; i < 9; i++) {
-            tempBoard = currentBoard.createNextBoard(i);
+            tempBoard = currentBoard.createNextNode(i);
             if (tempBoard != null) {
 
                 this.add(tempBoard);
@@ -22,12 +22,12 @@ public class DFSStack implements MyQueue {
     }
 
     @Override
-    public void add(Board board) {
+    public void add(Node board) {
         boardList.push(board);
     }
 
     @Override
-    public Board get() {
+    public Node get() {
         Search.expandedNodes++;
         return boardList.pop();
     }

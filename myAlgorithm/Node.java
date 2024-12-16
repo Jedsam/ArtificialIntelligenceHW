@@ -3,30 +3,30 @@ package myAlgorithm;
 import java.util.BitSet;
 import java.util.Map;
 
-public class Board {
+public class Node {
     private static int tileCount;
     private static int boardSize;
 
     private BitSet board;
     private int currentPosition;
-    private Board parentBoard;
+    private Node parentNode;
 
     public static void start(int boardsize) {
         boardSize = boardsize;
         tileCount = boardSize * boardSize;
     }
 
-    Board() {
+    Node() {
         this.board = new BitSet(boardSize * boardSize);
-        this.parentBoard = null;
+        this.parentNode = null;
 
         setStartingPosition(0);
     }
 
-    Board(BitSet board, int currentPosition, Board parent) {
+    Node(BitSet board, int currentPosition, Node parent) {
         this.board = board;
         this.currentPosition = currentPosition;
-        this.parentBoard = parent;
+        this.parentNode = parent;
     }
 
     private void setStartingPosition(int startingPosition) {
@@ -34,12 +34,12 @@ public class Board {
         currentPosition = startingPosition;
     }
 
-    public Board getParentBoard() {
-        return parentBoard;
+    public Node getParentNode() {
+        return parentNode;
     }
 
-    public Board clone() {
-        return new Board((BitSet) this.board.clone(), this.currentPosition, this.parentBoard);
+    public Node clone() {
+        return new Node((BitSet) this.board.clone(), this.currentPosition, this.parentNode);
     }
 
     public boolean isDone() { // Returns true if all tiles are visited
@@ -97,20 +97,20 @@ public class Board {
 
     }
 
-    public Board createNextBoard(int moveNumber) { // Creates next board based on the move number
+    public Node createNextNode(int moveNumber) { // Creates next board based on the move number
 
         int newPosition = calculateNextPosition(moveNumber);
 
         if (newPosition < 0 || board.get(newPosition) || newPosition >= tileCount) {
             return null;
         }
-        Board newBoard = clone();
-        newBoard.parentBoard = this;
+        Node newBoard = clone();
+        newBoard.parentNode = this;
         newBoard.movePosition(newPosition);
         return newBoard;
     }
 
-    public Map.Entry<Board, Integer> createNextBoardWithH1B(int moveNumber) { // Creates next board based on the move
+    public Map.Entry<Node, Integer> createNextNodeWithH1B(int moveNumber) { // Creates next board based on the move
                                                                               // number with h1b heuristic
 
         int newPosition = calculateNextPosition(moveNumber);
@@ -120,8 +120,8 @@ public class Board {
                 (heuristicVal == 0 && board.cardinality() >= tileCount)) {
             return null;
         }
-        Board newBoard = clone();
-        newBoard.parentBoard = this;
+        Node newBoard = clone();
+        newBoard.parentNode = this;
         newBoard.movePosition(newPosition);
         return Map.entry(newBoard, heuristicVal);
     }

@@ -6,17 +6,17 @@ import java.util.Map;
 
 public class H1BStack extends DFSStack {
 
-    H1BStack(Stack<Board> boardList) {
+    H1BStack(Stack<Node> boardList) {
         super(boardList);
     }
 
     @Override
-    public void calculateAndAddNextBoards(Board currentBoard) { // method for create next board and add to the stack for h1b
+    public void calculateAndAddNextBoards(Node currentBoard) { // method for create next board and add to the stack for h1b
 
         // list of board and heuristic value couples
-        ArrayList<Map.Entry<Board, Integer>> tempList = new ArrayList<>();
+        ArrayList<Map.Entry<Node, Integer>> tempList = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
-            Map.Entry<Board, Integer> result = currentBoard.createNextBoardWithH1B(i);
+            Map.Entry<Node, Integer> result = currentBoard.createNextNodeWithH1B(i);
             if (result != null) {
                 tempList.add(result);
             }
@@ -27,14 +27,14 @@ public class H1BStack extends DFSStack {
         if (!tempList.isEmpty()) {
             tempList = reverseArrayList(tempList);
         }
-        for (Map.Entry<Board, Integer> result : tempList) {
+        for (Map.Entry<Node, Integer> result : tempList) {
             this.add(result.getKey()); // take board with getKey() and add to the stack
         }
 
     }
 
-    private ArrayList<Map.Entry<Board, Integer>> reverseArrayList(ArrayList<Map.Entry<Board, Integer>> boardList) {
-        ArrayList<Map.Entry<Board, Integer>> reversedList = new ArrayList<Map.Entry<Board, Integer>>();
+    private ArrayList<Map.Entry<Node, Integer>> reverseArrayList(ArrayList<Map.Entry<Node, Integer>> boardList) {
+        ArrayList<Map.Entry<Node, Integer>> reversedList = new ArrayList<Map.Entry<Node, Integer>>();
 
         for (int i = boardList.size() - 1; i >= 0; i--) {
             reversedList.add(boardList.get(i));

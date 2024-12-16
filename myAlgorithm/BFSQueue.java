@@ -3,17 +3,17 @@ package myAlgorithm;
 import java.util.Queue;
 
 public class BFSQueue implements MyQueue {
-    Queue<Board> boardList;
+    Queue<Node> boardList;
 
-    BFSQueue(Queue<Board> boardList) {
+    BFSQueue(Queue<Node> boardList) {
         this.boardList = boardList;
     }
 
     @Override
-    public void calculateAndAddNextBoards(Board currentBoard) { // method for create next board and add to the queue
-        Board tempBoard;
+    public void calculateAndAddNextBoards(Node currentBoard) { // method for create next board and add to the queue
+        Node tempBoard;
         for (int i = 1; i < 9; i++) {
-            tempBoard = currentBoard.createNextBoard(i);
+            tempBoard = currentBoard.createNextNode(i);
             if (tempBoard != null) {
 
                 this.add(tempBoard);
@@ -22,12 +22,12 @@ public class BFSQueue implements MyQueue {
     }
 
     @Override
-    public void add(Board board) {
+    public void add(Node board) {
         boardList.add(board);
     }
 
     @Override
-    public Board get() {
+    public Node get() {
         Search.expandedNodes++;
         return boardList.poll();
     }

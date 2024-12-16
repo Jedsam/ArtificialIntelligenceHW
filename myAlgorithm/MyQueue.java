@@ -1,11 +1,11 @@
 package myAlgorithm;
 
 public interface MyQueue {
-    public void add(Board board);
+    public void add(Node board);
 
-    public void calculateAndAddNextBoards(Board currentBoard);
+    public void calculateAndAddNextBoards(Node currentBoard);
 
-    public Board get();
+    public Node get();
 
     public boolean isEmpty();
 }

@@ -1,4 +1,4 @@
-package myAlgorithm;
+package KnightTravelProblem;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -1,16 +1,16 @@
-package myAlgorithm;
+package KnightTravelProblem;
 
-import java.util.Stack;
+import java.util.Queue;
 
-public class DFSStack implements MyQueue {
-    Stack<Node> boardList;
+public class BFSQueue implements MyQueue {
+    Queue<Node> boardList;
 
-    DFSStack(Stack<Node> boardList) {
+    BFSQueue(Queue<Node> boardList) {
         this.boardList = boardList;
     }
 
     @Override
-    public void calculateAndAddNextBoards(Node currentBoard) {   // method for create next board and add to the stack for DFS
+    public void calculateAndAddNextBoards(Node currentBoard) { // method for create next board and add to the queue
         Node tempBoard;
         for (int i = 1; i < 9; i++) {
             tempBoard = currentBoard.createNextNode(i);
@@ -23,13 +23,13 @@ public class DFSStack implements MyQueue {
 
     @Override
     public void add(Node board) {
-        boardList.push(board);
+        boardList.add(board);
     }
 
     @Override
     public Node get() {
         Search.expandedNodes++;
-        return boardList.pop();
+        return boardList.poll();
     }
 
     @Override

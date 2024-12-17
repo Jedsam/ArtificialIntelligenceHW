@@ -1,4 +1,4 @@
-package myAlgorithm;
+package KnightTravelProblem;
 
 public interface MyQueue {
     public void add(Node board);

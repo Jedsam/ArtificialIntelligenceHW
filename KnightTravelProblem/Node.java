@@ -1,4 +1,4 @@
-package myAlgorithm;
+package KnightTravelProblem;
 
 import java.util.BitSet;
 import java.util.Map;

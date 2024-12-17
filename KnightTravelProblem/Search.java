@@ -1,4 +1,4 @@
-package myAlgorithm;
+package KnightTravelProblem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -113,7 +113,7 @@ public class Search {
     }
 
     private static ArrayList<String> startSearchBoard(Node board, String method) { // setup froniter based on search
-                                                                                    // method
+                                                                                   // method
         MyQueue frontier; // a class to use queue or stack with polymorphism
         if (method.equals("a")) { // BFS
             Queue<Node> tempQueue = new LinkedList<Node>();

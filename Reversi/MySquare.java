@@ -10,15 +10,23 @@ import javax.swing.JPanel;
 
 public class MySquare extends JPanel implements MouseListener {
     public static final int GUESS = 1;
-    int boardState = Board.EMPTY;
+
+    private int boardState = Board.EMPTY;
+    private int index;
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        boolean currentTurn = ReversiGUI.getGUI().myBoard.currentTurn;
-        boardState = currentTurn ? Board.BLACK : Board.WHITE;
-        ReversiGUI.getGUI().myBoard.currentTurn = !currentTurn;
+        if (boardState == Board.EMPTY || boardState == GUESS) {
+            ReversiStart.addToInputBuffer(index);
+        }
+    }
 
-        this.repaint();
+    public void setCoordinates(int index) {
+        this.index = index;
+    }
+
+    public void setState(int state) {
+        this.boardState = state;
     }
 
     @Override

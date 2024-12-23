@@ -318,6 +318,10 @@ public class Board {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
+                // Exit number
+                if (input == -2) {
+                    return;
+                }
                 input = player1.getInput();
             }
             ReversiStart.removeValidMoves(validMovesList);

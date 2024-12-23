@@ -33,6 +33,8 @@ public class ReversiGUI {
     private static ReversiGUI gui = null;
     private JFrame frame;
     private MySquare[] squares;
+    private JLabel gameStatus;
+    private Player player1, player2;
 
     public static ReversiGUI createGUI() {
         if (gui == null) {
@@ -54,8 +56,6 @@ public class ReversiGUI {
         frame.setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT); // Border size
         frame.setVisible(true); // Make it visible
         frame.setLayout(new GridBagLayout());
-
-        startSelectionScreen();
     }
 
     public void startSelectionScreen() {
@@ -100,8 +100,9 @@ public class ReversiGUI {
         changePanel(mainMenuFrame);
     }
 
-    public void startGameGUI() {
-
+    public void startGameGUI(Player player1, Player player2) {
+        this.player1 = player1;
+        this.player2 = player2;
         JPanel gameFrame = new JPanel();
         gameFrame.setLayout(new GridBagLayout());
 
@@ -137,19 +138,33 @@ public class ReversiGUI {
         }
 
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 0;
         gameFrame.add(boardPanel, gbc);
 
+        // Adding a return to the main menu button
+        JButton returnToMainMenuButton = new JButton("Return back to the Main Menu!");
+        returnToMainMenuButton.setPreferredSize(new Dimension(350, 100));
+        returnToMainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ReversiStart.addToInputBuffer(-2); // Add return val to the buffer
+            }
+        });
+
+        gameFrame.add(returnToMainMenuButton, gbc);
+
         // Add game status message
-        JLabel gameStatus = new JLabel("This is Reversi", SwingConstants.CENTER);
-        gameStatus.setFont(new Font("Arial", Font.PLAIN, 40)); // Set the font size and style
+        gameStatus = new JLabel(player1.getTurnMessage(), SwingConstants.CENTER);
+        gameStatus.setFont(new Font("Arial", Font.PLAIN, 20)); // Set the font size and style
 
         // Create a JPanel with FlowLayout to center the JLabel
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.add(gameStatus); // Add the label to the topPanel
 
+        topPanel.add(returnToMainMenuButton);
+
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gameFrame.add(topPanel, gbc);
 
         changePanel(gameFrame);
@@ -163,8 +178,14 @@ public class ReversiGUI {
     }
 
     public void addPiece(int index, int value) {
-
         squares[index].setState(value);
+        String turnText;
+        if (value == Board.WHITE) {
+            turnText = player1.getTurnMessage();
+        } else {
+            turnText = player2.getTurnMessage();
+        }
+        gameStatus.setText(turnText);
         frame.repaint();
         frame.revalidate();
     }

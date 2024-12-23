@@ -8,9 +8,9 @@ public class ComputerPlayer extends Player {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getInput'");
     }
-    
 
-    ComputerPlayer() {
+    ComputerPlayer(int color) {
+        this.color = color;
         this.name = "Computer" + ComputerCounter;
         ComputerCounter++;
     }

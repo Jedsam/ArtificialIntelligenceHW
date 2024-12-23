@@ -8,8 +8,9 @@ public class HumanPlayer extends Player {
         return ReversiStart.readInputFromBuffer();
     }
 
-    HumanPlayer (String name){
+    HumanPlayer (String name, int color){
         this.name = name;
+        this.color = color;
     }
 
 }

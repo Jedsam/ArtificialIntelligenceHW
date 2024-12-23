@@ -21,7 +21,8 @@ public class ReversiStart {
         myGui = ReversiGUI.createGUI();
         int currentInput;
         while (true) {
-            
+
+            myGui.startSelectionScreen();
             // Read the first player information
             currentInput = readInputFromBuffer();
             while (checkInvalidPlayerInput(currentInput)) {
@@ -46,7 +47,7 @@ public class ReversiStart {
             }
             Player player2 = getPlayer(currentInput, Board.WHITE);
 
-            myGui.startGameGUI();
+            myGui.startGameGUI(player1, player2);
 
             currentGame = new Board();
             currentGame.startGame(player1, player2);
@@ -54,18 +55,17 @@ public class ReversiStart {
 
     }
 
-    public static void startGameGUI() {
-        myGui.startGameGUI();
+    public static void startGameGUI(Player player1, Player player2) {
+        myGui.startGameGUI(player1, player2);
     }
 
     private static Player getPlayer(int currentInput, int playerNumber) {
 
         if (currentInput == HUMAN_PLAYER) {
             return (Player) new HumanPlayer(
-                    "Player " + (playerNumber == Board.BLACK ? 1 : 2) + " (" + (playerNumber == Board.BLACK ? "Black"
-                            : "White)") + ")");
+                    "Player " + (playerNumber == Board.BLACK ? 1 : 2), playerNumber);
         } else
-            return (Player) new HumanPlayer("playereee");
+            return (Player) new HumanPlayer("playereeEE", playerNumber);
 
     }
 

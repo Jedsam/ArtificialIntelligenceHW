@@ -105,4 +105,8 @@ public class ReversiStart {
     public static void removeValidMoves(ArrayList<Integer> validMovesList) {
         myGui.removeValidMoves(validMovesList);
     }
+
+    public static void setMessage(String printMessage) {
+        myGui.setMessage(printMessage);
+    }
 }

@@ -202,4 +202,8 @@ public class ReversiGUI {
         }
     }
 
+    public void setMessage(String printMessage) {
+        gameStatus.setText(printMessage);
+    }
+
 }

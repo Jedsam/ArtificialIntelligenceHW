@@ -337,7 +337,21 @@ public class Board {
             printMessage = "It is a draw!";
         }
 
-        ReversiStart.printMessage(printMessage);
+        ReversiStart.setMessage(printMessage);
+        // Wait for return back to main menu message
+        input = ReversiStart.readInputFromBuffer();
+        while (input == -1) {
+            try {
+                Thread.sleep(100); // Avoids high CPU usage
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            // Exit number
+            if (input == -2) {
+                return;
+            }
+            input = ReversiStart.readInputFromBuffer();
+        }
     }
 
     private int getMatchResult() {

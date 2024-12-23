@@ -7,18 +7,71 @@ import java.util.Queue;
 public class ReversiStart {
     private static final int INPUT_BUFFER_SIZE = 100;
     private static Queue<Integer> inputBuffer = new LinkedList<Integer>();
-
     private static ReversiGUI myGui;
+    private static Board currentGame;
+
+    // Add the new players to the string with their integer order
+    // Human player will always be 100
+    public static final String[] PLAYERS = { "Human", "AI" };
+    public static final int HUMAN_PLAYER = 100;
+    public static final int AI_PLAYER = 101;
 
     public static void main(String[] args) {
 
         myGui = ReversiGUI.createGUI();
-        Board myBoard = new Board();
+        int currentInput;
+        while (true) {
+            
+            // Read the first player information
+            currentInput = readInputFromBuffer();
+            while (checkInvalidPlayerInput(currentInput)) {
+                try {
+                    Thread.sleep(100); // Avoids high CPU usage
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                currentInput = readInputFromBuffer();
+            }
+            Player player1 = getPlayer(currentInput, Board.BLACK);
 
-        Player player1 = (Player) new HumanPlayer("Player 1");
-        Player player2 = (Player) new HumanPlayer("Player 2");
-        myBoard.startGame(player1, player2);
+            // Read the second player information
+            currentInput = readInputFromBuffer();
+            while (checkInvalidPlayerInput(currentInput)) {
+                try {
+                    Thread.sleep(100); // Avoids high CPU usage
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                currentInput = readInputFromBuffer();
+            }
+            Player player2 = getPlayer(currentInput, Board.WHITE);
 
+            myGui.startGameGUI();
+
+            currentGame = new Board();
+            currentGame.startGame(player1, player2);
+        }
+
+    }
+
+    public static void startGameGUI() {
+        myGui.startGameGUI();
+    }
+
+    private static Player getPlayer(int currentInput, int playerNumber) {
+
+        if (currentInput == HUMAN_PLAYER) {
+            return (Player) new HumanPlayer(
+                    "Player " + (playerNumber == Board.BLACK ? 1 : 2) + " (" + (playerNumber == Board.BLACK ? "Black"
+                            : "White)") + ")");
+        } else
+            return (Player) new HumanPlayer("playereee");
+
+    }
+
+    // Checks if the given integer is a player number
+    private static boolean checkInvalidPlayerInput(int currentInput) {
+        return !(currentInput == HUMAN_PLAYER || currentInput == AI_PLAYER);
     }
 
     public static void addToInputBuffer(int val) {

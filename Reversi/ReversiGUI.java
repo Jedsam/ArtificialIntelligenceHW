@@ -1,12 +1,14 @@
 package Reversi;
 
-import javax.naming.spi.ResolveResult;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +17,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ReversiGUI {
@@ -44,13 +48,63 @@ public class ReversiGUI {
     }
 
     private ReversiGUI() {
-
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Makes the program stop after closing the app
         frame.setResizable(false); // Constant size
         frame.setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT); // Border size
         frame.setVisible(true); // Make it visible
         frame.setLayout(new GridBagLayout());
+
+        startSelectionScreen();
+    }
+
+    public void startSelectionScreen() {
+        JPanel mainMenuFrame = new JPanel(); // Null layout requires manual positioning
+        mainMenuFrame.setLayout(new BoxLayout(mainMenuFrame, BoxLayout.Y_AXIS));
+
+        JLabel player1 = new JLabel("Player 1");
+        JLabel player2 = new JLabel("Player 2");
+
+        JComboBox cb1 = new JComboBox(ReversiStart.PLAYERS);
+        JComboBox cb2 = new JComboBox(ReversiStart.PLAYERS);
+        cb1.setPreferredSize(new Dimension(300, 100));
+        cb2.setPreferredSize(new Dimension(300, 100));
+
+        cb1.add(player1);
+        cb2.add(player2);
+
+        mainMenuFrame.add(cb1);
+        mainMenuFrame.add(Box.createVerticalStrut(50));
+        mainMenuFrame.add(cb2);
+        mainMenuFrame.add(Box.createVerticalStrut(50));
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        JButton startGameButton = new JButton("Start the game!");
+        startGameButton.setPreferredSize(new Dimension(350, 100));
+        buttonPanel.add(startGameButton);
+        startGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get selected values from combo boxes
+                int player1Selection = cb1.getSelectedIndex();
+                int player2Selection = cb2.getSelectedIndex();
+
+                // Human player selection + player selection
+                ReversiStart.addToInputBuffer(player1Selection + ReversiStart.HUMAN_PLAYER);
+                ReversiStart.addToInputBuffer(player2Selection + ReversiStart.HUMAN_PLAYER);
+            }
+        });
+
+        mainMenuFrame.add(buttonPanel);
+        changePanel(mainMenuFrame);
+    }
+
+    public void startGameGUI() {
+
+        JPanel gameFrame = new JPanel();
+        gameFrame.setLayout(new GridBagLayout());
+
         // Initilaise the board squares
 
         // Color of the board
@@ -84,7 +138,7 @@ public class ReversiGUI {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        frame.add(boardPanel, gbc);
+        gameFrame.add(boardPanel, gbc);
 
         // Add game status message
         JLabel gameStatus = new JLabel("This is Reversi", SwingConstants.CENTER);
@@ -96,13 +150,23 @@ public class ReversiGUI {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        frame.add(topPanel, gbc);
+        gameFrame.add(topPanel, gbc);
+
+        changePanel(gameFrame);
+    }
+
+    private void changePanel(JPanel panel) {
+        frame.getContentPane().removeAll();
+        frame.add(panel);
+        frame.revalidate();
+        frame.repaint();
     }
 
     public void addPiece(int index, int value) {
 
         squares[index].setState(value);
         frame.repaint();
+        frame.revalidate();
     }
 
     public void addValidMoves(ArrayList<Integer> validMovesList) {
@@ -116,4 +180,5 @@ public class ReversiGUI {
             squares[index].setState(Board.EMPTY);
         }
     }
+
 }

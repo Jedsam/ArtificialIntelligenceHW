@@ -9,6 +9,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,6 +34,10 @@ public class ReversiGUI {
     public static final int SQUARE_WIDTH = BOARD_WIDTH / Board.BOARD_SIDE_LENGTH - EDGE_THICKNESS * 2;
     public static final int SQUARE_HEIGHT = BOARD_HEIGHT / Board.BOARD_SIDE_LENGTH - EDGE_THICKNESS * 2;
 
+    private static final Color boardColor = new Color(0, 155, 72);
+    private static final Color backgroundColor = new Color(100, 155, 72);
+    private static final Color textBackgroundColor = new Color(239, 228, 176);
+    private static final Color middleBackgroundColor = new Color(200, 243, 171);
     private static ReversiGUI gui = null;
     private JFrame frame;
     private MySquare[] squares;
@@ -56,32 +64,60 @@ public class ReversiGUI {
         frame.setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT); // Border size
         frame.setVisible(true); // Make it visible
         frame.setLayout(new GridBagLayout());
+        frame.getContentPane().setBackground(backgroundColor);
+        frame.setBackground(backgroundColor);
     }
 
     public void startSelectionScreen() {
         JPanel mainMenuFrame = new JPanel(); // Null layout requires manual positioning
         mainMenuFrame.setLayout(new BoxLayout(mainMenuFrame, BoxLayout.Y_AXIS));
+        mainMenuFrame.setBackground(middleBackgroundColor);
 
-        JLabel player1 = new JLabel("Player 1");
-        JLabel player2 = new JLabel("Player 2");
+        mainMenuFrame.add(Box.createVerticalStrut(50));
+
+        JLabel player1 = new JLabel("Player 1 :");
+        JLabel player2 = new JLabel("Player 2 :");
+
+        player1.setFont(new Font("Arial", Font.PLAIN, 20));
+        player2.setFont(new Font("Arial", Font.PLAIN, 20));
+
+        player1.setBackground(middleBackgroundColor);
+        player2.setBackground(middleBackgroundColor);
 
         JComboBox cb1 = new JComboBox(ReversiStart.PLAYERS);
         JComboBox cb2 = new JComboBox(ReversiStart.PLAYERS);
+
         cb1.setPreferredSize(new Dimension(300, 100));
         cb2.setPreferredSize(new Dimension(300, 100));
 
-        cb1.add(player1);
-        cb2.add(player2);
+        player1.setOpaque(true);
+        player2.setOpaque(true);
+        cb1.setOpaque(true);
+        cb2.setOpaque(true);
 
-        mainMenuFrame.add(cb1);
+        JPanel player1Panel = new JPanel();
+        player1Panel.setLayout(new BoxLayout(player1Panel, BoxLayout.X_AXIS));
+        player1Panel.add(player1);
+        player1Panel.add(cb1);
+
+        JPanel player2Panel = new JPanel();
+        player2Panel.setLayout(new BoxLayout(player2Panel, BoxLayout.X_AXIS));
+        player2Panel.add(player2);
+        player2Panel.add(cb2);
+
+        player1Panel.setBackground(middleBackgroundColor);
+        player2Panel.setBackground(middleBackgroundColor);
+
+        mainMenuFrame.add(player1Panel);
         mainMenuFrame.add(Box.createVerticalStrut(50));
-        mainMenuFrame.add(cb2);
+        mainMenuFrame.add(player2Panel);
         mainMenuFrame.add(Box.createVerticalStrut(50));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JButton startGameButton = new JButton("Start the game!");
         startGameButton.setPreferredSize(new Dimension(350, 100));
+        buttonPanel.setBackground(middleBackgroundColor);
         buttonPanel.add(startGameButton);
         startGameButton.addActionListener(new ActionListener() {
             @Override
@@ -97,6 +133,9 @@ public class ReversiGUI {
         });
 
         mainMenuFrame.add(buttonPanel);
+        Border lineBorder = new LineBorder(Color.BLACK, 2); // Outer border
+        Border emptyBorder = new EmptyBorder(10, 10, 10, 10); // Inner padding
+        mainMenuFrame.setBorder(new CompoundBorder(lineBorder, emptyBorder));
         changePanel(mainMenuFrame);
     }
 
@@ -105,12 +144,12 @@ public class ReversiGUI {
         this.player2 = player2;
         JPanel gameFrame = new JPanel();
         gameFrame.setLayout(new GridBagLayout());
-
+        gameFrame.setBackground(textBackgroundColor);
         // Initilaise the board squares
 
         // Color of the board
 
-        Color backgroundColor = new Color(0, 155, 72); // Colors for green
+        // Colors for green
 
         // For setting the edges
         GridBagConstraints gbc = new GridBagConstraints();
@@ -128,7 +167,7 @@ public class ReversiGUI {
             for (int j = Board.BOARD_SIDE_LENGTH - 1; j >= 0; j--) {
                 temp = new MySquare();
                 temp.setCoordinates(index);
-                temp.setBackground(backgroundColor);
+                temp.setBackground(boardColor);
                 temp.setBorder(BorderFactory.createLineBorder(Color.BLACK, EDGE_THICKNESS));
                 temp.addMouseListener(temp);
                 squares[index] = temp;
@@ -138,12 +177,12 @@ public class ReversiGUI {
         }
 
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gameFrame.add(boardPanel, gbc);
 
         // Adding a return to the main menu button
         JButton returnToMainMenuButton = new JButton("Return back to the Main Menu!");
-        returnToMainMenuButton.setPreferredSize(new Dimension(350, 100));
+        returnToMainMenuButton.setPreferredSize(new Dimension(250, 80));
         returnToMainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,14 +196,16 @@ public class ReversiGUI {
         gameStatus = new JLabel(player1.getTurnMessage(), SwingConstants.CENTER);
         gameStatus.setFont(new Font("Arial", Font.PLAIN, 20)); // Set the font size and style
 
+        gameStatus.setBackground(textBackgroundColor);
         // Create a JPanel with FlowLayout to center the JLabel
+
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        topPanel.setBackground(textBackgroundColor);
         topPanel.add(gameStatus); // Add the label to the topPanel
 
         topPanel.add(returnToMainMenuButton);
-
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 0;
         gameFrame.add(topPanel, gbc);
 
         changePanel(gameFrame);

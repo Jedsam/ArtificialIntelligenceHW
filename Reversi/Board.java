@@ -95,7 +95,6 @@ public class Board {
             if (checkLine(index, LEFT_UP, false)) {
                 flipLine(index, LEFT_UP, false);
             }
-
         }
     }
 
@@ -108,7 +107,7 @@ public class Board {
         while (checkPositionalAvailability(index + increment) && (dontCheckHorizontal ||
                 checkHorizontalOutOfBounds(index, increment))) {
             index += increment;
-            // If it is the different color from the current turns color then return true
+            // If it is the different color from the current turns color then flip the color
             currentVal = getSquareOfBoard(index);
             if ((currentVal == BLACK && !currentTurn) || (currentVal == WHITE && currentTurn)) {
                 setSquareOfBoard(index, currentColor);
@@ -128,10 +127,9 @@ public class Board {
         }
 
         if (moves.isEmpty()) {
-            // Skip turn
-            currentTurn = !currentTurn;
             return null;
         }
+
         return moves;
     }
 
@@ -298,8 +296,9 @@ public class Board {
     public void startGame(Player player1, Player player2) {
         int skipCount = 0;
         int input;
+        int moveCount = 0;
         ArrayList<Integer> validMovesList;
-        while (skipCount < 2) {
+        while (skipCount < 2 || moveCount >= 64) {
             validMovesList = findValidMoves();
             if (validMovesList == null) {
                 // skip turn if no valid moves found
@@ -307,6 +306,7 @@ public class Board {
                 currentTurn = !currentTurn;
                 continue;
             }
+            moveCount++;
             ReversiStart.addValidMoves(validMovesList);
             skipCount = 0;
             input = player1.getInput();

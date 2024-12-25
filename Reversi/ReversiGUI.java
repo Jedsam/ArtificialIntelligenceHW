@@ -84,8 +84,8 @@ public class ReversiGUI {
         player1.setBackground(middleBackgroundColor);
         player2.setBackground(middleBackgroundColor);
 
-        JComboBox cb1 = new JComboBox(ReversiStart.PLAYERS);
-        JComboBox cb2 = new JComboBox(ReversiStart.PLAYERS);
+        JComboBox<String> cb1 = new JComboBox<>(ReversiStart.PLAYERS);
+        JComboBox<String> cb2 = new JComboBox<>(ReversiStart.PLAYERS);
 
         cb1.setPreferredSize(new Dimension(300, 100));
         cb2.setPreferredSize(new Dimension(300, 100));

@@ -22,15 +22,15 @@ public class Board {
         currentTurn = true;
 
         // Starting board
-        setSquareOfBoard(27, WHITE);
-        setSquareOfBoard(28, BLACK);
-        setSquareOfBoard(35, BLACK);
-        setSquareOfBoard(36, WHITE);
+        setSquareFromBoard(27, WHITE);
+        setSquareFromBoard(28, BLACK);
+        setSquareFromBoard(35, BLACK);
+        setSquareFromBoard(36, WHITE);
     }
 
     public boolean makeAMove(int index) {
         if (checkValidMove(index)) {
-            setSquareOfBoard(index, currentTurn ? BLACK : WHITE);
+            setSquareFromBoard(index, currentTurn ? BLACK : WHITE);
             flipSquares(index);
             currentTurn = !currentTurn;
             return true;
@@ -108,9 +108,9 @@ public class Board {
                 checkHorizontalOutOfBounds(index, increment))) {
             index += increment;
             // If it is the different color from the current turns color then flip the color
-            currentVal = getSquareOfBoard(index);
+            currentVal = getSquareFromBoard(index);
             if ((currentVal == BLACK && !currentTurn) || (currentVal == WHITE && currentTurn)) {
-                setSquareOfBoard(index, currentColor);
+                setSquareFromBoard(index, currentColor);
             } else
                 return;
         }
@@ -145,7 +145,7 @@ public class Board {
 
     private boolean checkValidMove(int index) {
         // Return false if the square is not empty
-        if (getSquareOfBoard(index) != EMPTY) {
+        if (getSquareFromBoard(index) != EMPTY) {
             return false;
         }
 
@@ -214,9 +214,9 @@ public class Board {
 
     }
 
+    // A check to see if an index reaches out of bounds horizontally
+    // Use with values -1,1,-7,7,-9,9
     private boolean checkHorizontalOutOfBounds(int index, int increment) {
-        // A check to see if an index reaches out of bounds horizontally
-        // Use with values -1,1,-7,7,-9,9
         int row = index % 8;
         if (row == 0) {
             return !((index + increment) % 8 == 7);
@@ -227,10 +227,13 @@ public class Board {
             return true;
     }
 
+    // Checks whether the given index is out of bounds for this board
     private boolean checkPositionalAvailability(int index) {
         return index < BOARD_SIZE && index >= 0;
     }
 
+    // Checks the line given the increment if its vertical increment only then
+    // dontCheckHorizontal is true
     private boolean checkLine(int index, int increment, boolean dontCheckHorizontal) {
         int currentVal;
 
@@ -239,7 +242,7 @@ public class Board {
                 checkHorizontalOutOfBounds(index, increment))) {
             index += increment;
         }
-        currentVal = getSquareOfBoard(index);
+        currentVal = getSquareFromBoard(index);
         if (!((currentVal == BLACK && !currentTurn) || (currentVal == WHITE && currentTurn))) {
             return false;
         }
@@ -249,7 +252,7 @@ public class Board {
                 checkHorizontalOutOfBounds(index, increment))) {
             index += increment;
             // If it is the different color from the current turns color then return true
-            currentVal = getSquareOfBoard(index);
+            currentVal = getSquareFromBoard(index);
             if (currentVal == EMPTY) {
                 return false;
             }
@@ -261,8 +264,9 @@ public class Board {
         return false;
     }
 
+    // Sets the board value given the color integer value
     // 01,00 (1,0)= empty, 10 (2) = white, 11 (3)= black
-    private void setSquareOfBoard(int index, int value) {
+    private void setSquareFromBoard(int index, int value) {
         ReversiStart.addPiece(index, value);
         if (value == BLACK) {
             // Black case
@@ -275,12 +279,13 @@ public class Board {
         } else {
             // Empty case
             boardArray.clear(index * 2);
-            boardArray.set(index * 2 + 1);
+            // No need to set the 2nd value
         }
     }
 
+    // Gets the color integer value at the given index
     // 01,00 (1,0)= empty, 10 (2) = white, 11 (3)= black
-    private int getSquareOfBoard(int index) {
+    private int getSquareFromBoard(int index) {
         if (boardArray.get(index * 2)) {
             if (boardArray.get(index * 2 + 1)) {
                 return BLACK;
@@ -344,7 +349,7 @@ public class Board {
         int blackPieces = 0;
         int whitePieces = 0;
         for (int i = 0; i < BOARD_SIZE; i++) {
-            int currentPiece = getSquareOfBoard(i);
+            int currentPiece = getSquareFromBoard(i);
             if (currentPiece == BLACK) {
                 blackPieces++;
             } else {

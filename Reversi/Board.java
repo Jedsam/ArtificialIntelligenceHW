@@ -3,8 +3,6 @@ package Reversi;
 import java.util.ArrayList;
 import java.util.BitSet;
 
-import javax.naming.spi.ResolveResult;
-
 public class Board {
 
     // 01,00 (1,0)= empty, 10 (2) = white, 11 (3)= black
@@ -312,14 +310,9 @@ public class Board {
             ReversiStart.addValidMoves(validMovesList);
             skipCount = 0;
             input = player1.getInput();
-            while (input == -1 || !checkPositionalAvailability(input)) {
-                try {
-                    Thread.sleep(100); // Avoids high CPU usage
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+            while (!checkPositionalAvailability(input)) {
                 // Exit number
-                if (input == -2) {
+                if (input == ReversiStart.EXIT_CODE) {
                     return;
                 }
                 input = player1.getInput();
@@ -338,20 +331,13 @@ public class Board {
         }
 
         ReversiStart.setMessage(printMessage);
+
         // Wait for return back to main menu message
         input = ReversiStart.readInputFromBuffer();
-        while (input == -1) {
-            try {
-                Thread.sleep(100); // Avoids high CPU usage
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            // Exit number
-            if (input == -2) {
-                return;
-            }
+        while (input != ReversiStart.EXIT_CODE) {
             input = ReversiStart.readInputFromBuffer();
         }
+
     }
 
     private int getMatchResult() {

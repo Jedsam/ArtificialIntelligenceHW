@@ -10,11 +10,18 @@ public class ReversiStart {
     private static ReversiGUI myGui;
     private static Board currentGame;
 
+    // Variable for the sleep method between each input
+    private static final int TIME_BETWEEN_INPUT = 100;
+
     // Add the new players to the string with their integer order
     // Human player will always be 100
     public static final String[] PLAYERS = { "Human", "AI" };
     public static final int HUMAN_PLAYER = 100;
     public static final int AI_PLAYER = 101;
+
+    // Input output variables
+    public static final int INVALID_INPUT = -1;
+    public static final int EXIT_CODE = -2;
 
     public static void main(String[] args) {
 
@@ -26,11 +33,6 @@ public class ReversiStart {
             // Read the first player information
             currentInput = readInputFromBuffer();
             while (checkInvalidPlayerInput(currentInput)) {
-                try {
-                    Thread.sleep(100); // Avoids high CPU usage
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
                 currentInput = readInputFromBuffer();
             }
             Player player1 = getPlayer(currentInput, Board.BLACK);
@@ -38,11 +40,6 @@ public class ReversiStart {
             // Read the second player information
             currentInput = readInputFromBuffer();
             while (checkInvalidPlayerInput(currentInput)) {
-                try {
-                    Thread.sleep(100); // Avoids high CPU usage
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
                 currentInput = readInputFromBuffer();
             }
             Player player2 = getPlayer(currentInput, Board.WHITE);
@@ -91,9 +88,16 @@ public class ReversiStart {
     }
 
     public static int readInputFromBuffer() {
+
         Integer returnVal = inputBuffer.poll();
-        if (returnVal == null) {
-            return -1;
+        while (returnVal == null) {
+            try {
+                Thread.sleep(TIME_BETWEEN_INPUT); // Add delay to avoid high CPU usage and adds a small wait time
+                                                  // between moves
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            returnVal = inputBuffer.poll();
         }
         return returnVal.intValue();
     }

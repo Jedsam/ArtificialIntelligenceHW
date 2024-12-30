@@ -1,10 +1,12 @@
 package Reversi;
 
+import java.util.ArrayList;
+
 public class HumanPlayer extends Player {
     
     
     @Override
-    public int getInput() {
+    public int getInput(ArrayList<Short> validMovesList) {
         return ReversiStart.readInputFromBuffer();
     }
 

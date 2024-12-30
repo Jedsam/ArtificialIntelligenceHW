@@ -62,7 +62,7 @@ public class ReversiStart {
             return (Player) new HumanPlayer(
                     "Player " + (playerNumber == Board.BLACK ? 1 : 2), playerNumber);
         } else
-            return (Player) new HumanPlayer("playereeEE", playerNumber);
+            return (Player) new ComputerPlayer(playerNumber);
 
     }
 
@@ -102,11 +102,11 @@ public class ReversiStart {
         return returnVal.intValue();
     }
 
-    public static void addValidMoves(ArrayList<Integer> validMovesList) {
+    public static void addValidMoves(ArrayList<Short> validMovesList) {
         myGui.addValidMoves(validMovesList);
     }
 
-    public static void removeValidMoves(ArrayList<Integer> validMovesList) {
+    public static void removeValidMoves(ArrayList<Short> validMovesList) {
         myGui.removeValidMoves(validMovesList);
     }
 

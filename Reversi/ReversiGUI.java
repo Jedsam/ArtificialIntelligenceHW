@@ -231,13 +231,13 @@ public class ReversiGUI {
         frame.revalidate();
     }
 
-    public void addValidMoves(ArrayList<Integer> validMovesList) {
+    public void addValidMoves(ArrayList<Short> validMovesList) {
         for (int index : validMovesList) {
             squares[index].setState(MySquare.GUESS);
         }
     }
 
-    public void removeValidMoves(ArrayList<Integer> validMovesList) {
+    public void removeValidMoves(ArrayList<Short> validMovesList) {
         for (int index : validMovesList) {
             squares[index].setState(Board.EMPTY);
         }

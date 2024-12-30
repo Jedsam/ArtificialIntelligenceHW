@@ -116,11 +116,11 @@ public class Board {
         }
     }
 
-    public ArrayList<Integer> findValidMoves() {
-        ArrayList<Integer> moves = new ArrayList<Integer>();
+    public ArrayList<Short> findValidMoves() {
+        ArrayList<Short> moves = new ArrayList<Short>();
 
         // Go through all the squares
-        for (int i = 0; i < 64; i++) {
+        for (short i = 0; i < 64; i++) {
             if (checkValidMove(i)) {
                 moves.add(i);
             }
@@ -302,8 +302,9 @@ public class Board {
         int skipCount = 0;
         int input;
         int moveCount = 0;
-        ArrayList<Integer> validMovesList;
+        ArrayList<Short> validMovesList;
         while (skipCount < 2 || moveCount >= 64) {
+            Player CurrentPlayer = currentTurn ? player1 : player2;
             validMovesList = findValidMoves();
             if (validMovesList == null) {
                 // skip turn if no valid moves found
@@ -314,13 +315,13 @@ public class Board {
             moveCount++;
             ReversiStart.addValidMoves(validMovesList);
             skipCount = 0;
-            input = player1.getInput();
+            input = CurrentPlayer.getInput(validMovesList);
             while (!checkPositionalAvailability(input)) {
                 // Exit number
                 if (input == ReversiStart.EXIT_CODE) {
                     return;
                 }
-                input = player1.getInput();
+                input = CurrentPlayer.getInput(validMovesList);
             }
             ReversiStart.removeValidMoves(validMovesList);
             makeAMove(input);

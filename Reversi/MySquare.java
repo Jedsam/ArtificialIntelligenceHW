@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.BasicStroke;
 
 import javax.swing.JPanel;
 
@@ -40,7 +41,8 @@ public class MySquare extends JPanel implements MouseListener {
             int y = (getHeight() - diameter) / 2; // Center vertically
 
             if (boardState == MySquare.GUESS) {
-                g2d.setColor(Color.red);
+                g2d.setColor(Color.blue);
+                g2d.setStroke(new BasicStroke(2.0f));
                 g2d.drawOval(x, y, diameter, diameter);
             } else {
                 Color pieceColor = boardState == Board.BLACK ? Color.BLACK : Color.WHITE;

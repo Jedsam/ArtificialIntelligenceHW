@@ -8,16 +8,20 @@ public class ReversiStart {
     private static final int INPUT_BUFFER_SIZE = 100;
     private static Queue<Integer> inputBuffer = new LinkedList<Integer>();
     private static ReversiGUI myGui;
-    private static Board currentGame;
+    public static Board currentGame;
 
     // Variable for the sleep method between each input
-    private static final int TIME_BETWEEN_INPUT = 100;
+    private static final int TIME_BETWEEN_INPUT = 50;
+
+    public static final int depth = 3;
 
     // Add the new players to the string with their integer order
     // Human player will always be 100
-    public static final String[] PLAYERS = { "Human", "AI" };
+    public static final String[] PLAYERS = { "Human", "AI-H1", "AI-H2", "AI-H3"};
     public static final int HUMAN_PLAYER = 100;
-    public static final int AI_PLAYER = 101;
+    public static final int AI_PLAYER_H1 = 101;
+    public static final int AI_PLAYER_H2 = 102;
+    public static final int AI_PLAYER_H3 = 103;
 
     // Input output variables
     public static final int INVALID_INPUT = -1;
@@ -61,14 +65,19 @@ public class ReversiStart {
         if (currentInput == HUMAN_PLAYER) {
             return (Player) new HumanPlayer(
                     "Player " + (playerNumber == Board.BLACK ? 1 : 2), playerNumber);
-        } else
-            return (Player) new ComputerPlayer(playerNumber);
-
+        } else if (currentInput == AI_PLAYER_H1) {
+            return (Player) new ComputerH1(playerNumber);
+        } else if (currentInput == AI_PLAYER_H2) {
+            return (Player) new ComputerH2(playerNumber);
+        } else {
+            return (Player) new ComputerH3(playerNumber);
+        } 
     }
 
     // Checks if the given integer is a player number
     private static boolean checkInvalidPlayerInput(int currentInput) {
-        return !(currentInput == HUMAN_PLAYER || currentInput == AI_PLAYER);
+        return !(currentInput == HUMAN_PLAYER || currentInput == AI_PLAYER_H1 || currentInput == AI_PLAYER_H2
+                || currentInput == AI_PLAYER_H3);
     }
 
     public static void addToInputBuffer(int val) {

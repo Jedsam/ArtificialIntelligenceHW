@@ -6,7 +6,7 @@ public class HumanPlayer extends Player {
     
     
     @Override
-    public int getInput(ArrayList<Short> validMovesList) {
+    public int getInput() {
         return ReversiStart.readInputFromBuffer();
     }
 

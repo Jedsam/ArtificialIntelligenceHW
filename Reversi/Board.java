@@ -13,56 +13,70 @@ public class Board {
     public static final int BOARD_SIZE = BOARD_SIDE_LENGTH * BOARD_SIDE_LENGTH;
 
     BitSet boardArray;
-    boolean currentTurn; // Black = true, White = false
+    public boolean currentTurn; // Black = true, White = false
+    public ArrayList<Integer> lastMoves = new ArrayList<Integer>();
 
     Board() {
         // initialise the board
         boardArray = new BitSet(128);
+        // prepare the lastMoves arraylist
+        for (int i = 0; i < ReversiStart.depth; i++) {
+            lastMoves.add(-1);
+        }
         // The game starts with black
         currentTurn = true;
 
         // Starting board
-        setSquareFromBoard(27, WHITE);
-        setSquareFromBoard(28, BLACK);
-        setSquareFromBoard(35, BLACK);
-        setSquareFromBoard(36, WHITE);
+        setSquareFromBoard(27, WHITE, true);
+        setSquareFromBoard(28, BLACK, true);
+        setSquareFromBoard(35, BLACK, true);
+        setSquareFromBoard(36, WHITE, true);
     }
 
-    public boolean makeAMove(int index) {
+    Board(Board board) {
+        this.boardArray = (BitSet) board.boardArray.clone();
+        this.currentTurn = board.currentTurn;
+        this.lastMoves = new ArrayList<>(board.lastMoves);
+    }
+
+    public boolean makeAMove(int index, boolean UIChange) {
         if (checkValidMove(index)) {
-            setSquareFromBoard(index, currentTurn ? BLACK : WHITE);
-            flipSquares(index);
+            setSquareFromBoard(index, currentTurn ? BLACK : WHITE, UIChange);
+            flipSquares(index, UIChange);
             currentTurn = !currentTurn;
+            lastMoves.remove(0);
+            lastMoves.add(index);
             return true;
         }
         return false;
     }
+    
 
-    private void flipSquares(int index) {
+    public void flipSquares(int index, boolean UIChange) {
         // Check for below squares
         if (checkPositionalAvailability(index + DOWN)) {
             if (checkLine(index, DOWN, true)) {
-                flipLine(index, DOWN, true);
+                flipLine(index, DOWN, true, UIChange);
             }
         }
 
         // Check for bottom squares
         if (checkPositionalAvailability(index + UP)) {
             if (checkLine(index, UP, true)) {
-                flipLine(index, UP, true);
+                flipLine(index, UP, true, UIChange);
             }
         }
 
         // check for right squares
         if (checkHorizontalOutOfBounds(index, RIGHT)) {
             if (checkLine(index, RIGHT, false)) {
-                flipLine(index, RIGHT, false);
+                flipLine(index, RIGHT, false, UIChange);
             }
         }
         // check for left squares
         if (checkHorizontalOutOfBounds(index, LEFT)) {
             if (checkLine(index, LEFT, false)) {
-                flipLine(index, LEFT, false);
+                flipLine(index, LEFT, false, UIChange);
             }
         }
 
@@ -71,14 +85,14 @@ public class Board {
         // check for above right
         if (checkPositionalAvailability(index + RIGHT_UP)) {
             if (checkLine(index, RIGHT_UP, false)) {
-                flipLine(index, RIGHT_UP, false);
+                flipLine(index, RIGHT_UP, false, UIChange);
             }
         }
 
         // check for down right
         if (checkPositionalAvailability(index + RIGHT_DOWN)) {
             if (checkLine(index, RIGHT_DOWN, false)) {
-                flipLine(index, RIGHT_DOWN, false);
+                flipLine(index, RIGHT_DOWN, false, UIChange);
             }
 
         }
@@ -86,19 +100,19 @@ public class Board {
         // check for down left
         if (checkPositionalAvailability(index + LEFT_DOWN)) {
             if (checkLine(index, LEFT_DOWN, false)) {
-                flipLine(index, LEFT_DOWN, false);
+                flipLine(index, LEFT_DOWN, false, UIChange);
             }
         }
 
         // check for above left
         if (checkPositionalAvailability(index + LEFT_UP)) {
             if (checkLine(index, LEFT_UP, false)) {
-                flipLine(index, LEFT_UP, false);
+                flipLine(index, LEFT_UP, false, UIChange);
             }
         }
     }
 
-    private void flipLine(int index, int increment, boolean dontCheckHorizontal) {
+    private void flipLine(int index, int increment, boolean dontCheckHorizontal, boolean UIChange) {
         int currentVal;
         int currentColor = currentTurn ? BLACK : WHITE;
         // checking for the square right next to the current piece
@@ -110,7 +124,7 @@ public class Board {
             // If it is the different color from the current turns color then flip the color
             currentVal = getSquareFromBoard(index);
             if ((currentVal == BLACK && !currentTurn) || (currentVal == WHITE && currentTurn)) {
-                setSquareFromBoard(index, currentColor);
+                setSquareFromBoard(index, currentColor, UIChange);
             } else
                 return;
         }
@@ -266,8 +280,8 @@ public class Board {
 
     // Sets the board value given the color integer value
     // 01,00 (1,0)= empty, 10 (2) = white, 11 (3)= black
-    private void setSquareFromBoard(int index, int value) {
-        ReversiStart.addPiece(index, value);
+    public void setSquareFromBoard(int index, int value, boolean UIChange) {
+        if (UIChange) ReversiStart.addPiece(index, value);
         if (value == BLACK) {
             // Black case
             boardArray.set(index * 2);
@@ -315,16 +329,16 @@ public class Board {
             moveCount++;
             ReversiStart.addValidMoves(validMovesList);
             skipCount = 0;
-            input = CurrentPlayer.getInput(validMovesList);
+            input = CurrentPlayer.getInput();
             while (!checkPositionalAvailability(input)) {
                 // Exit number
                 if (input == ReversiStart.EXIT_CODE) {
                     return;
                 }
-                input = CurrentPlayer.getInput(validMovesList);
+                input = CurrentPlayer.getInput();
             }
             ReversiStart.removeValidMoves(validMovesList);
-            makeAMove(input);
+            makeAMove(input, true);
         }
         int matchResult = getMatchResult();
         String printMessage;
@@ -337,7 +351,7 @@ public class Board {
         }
 
         ReversiStart.setMessage(printMessage);
-
+        ComputerPlayer.ComputerCounter = 1;
         // Wait for return back to main menu message
         input = ReversiStart.readInputFromBuffer();
         while (input != ReversiStart.EXIT_CODE) {
@@ -353,7 +367,7 @@ public class Board {
             int currentPiece = getSquareFromBoard(i);
             if (currentPiece == BLACK) {
                 blackPieces++;
-            } else {
+            } else if (currentPiece == WHITE) {
                 whitePieces++;
             }
         }
@@ -365,6 +379,20 @@ public class Board {
             return EMPTY; // Draw case
         }
 
+    }
+
+    public short[] calculatePieces() {
+        short blackPieces = 0;
+        short whitePieces = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            int currentPiece = getSquareFromBoard(i);
+            if (currentPiece == BLACK) {
+                blackPieces++;
+            } else if (currentPiece == WHITE) {
+                whitePieces++;
+            }
+        }
+        return new short[] { blackPieces, whitePieces };
     }
 
 }

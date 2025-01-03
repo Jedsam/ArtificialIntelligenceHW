@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.BasicStroke;
+import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
@@ -35,7 +36,7 @@ public class MySquare extends JPanel implements MouseListener {
         super.paintComponent(g);
         if (boardState != Board.EMPTY) {
             Graphics2D g2d = (Graphics2D) g;
-
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             int diameter = Math.min(getWidth(), getHeight()) * 3 / 4; // Circle diameter
             int x = (getWidth() - diameter) / 2; // Center horizontally
             int y = (getHeight() - diameter) / 2; // Center vertically

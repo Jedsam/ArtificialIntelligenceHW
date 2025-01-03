@@ -299,7 +299,7 @@ public class Board {
 
     // Gets the color integer value at the given index
     // 01,00 (1,0)= empty, 10 (2) = white, 11 (3)= black
-    private int getSquareFromBoard(int index) {
+    public int getSquareFromBoard(int index) {
         if (boardArray.get(index * 2)) {
             if (boardArray.get(index * 2 + 1)) {
                 return BLACK;
@@ -326,8 +326,14 @@ public class Board {
                 currentTurn = !currentTurn;
                 continue;
             }
+            
             moveCount++;
             ReversiStart.addValidMoves(validMovesList);
+           /*  try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
             skipCount = 0;
             input = CurrentPlayer.getInput();
             while (!checkPositionalAvailability(input)) {
@@ -339,6 +345,7 @@ public class Board {
             }
             ReversiStart.removeValidMoves(validMovesList);
             makeAMove(input, true);
+            
         }
         int matchResult = getMatchResult();
         String printMessage;
@@ -359,6 +366,23 @@ public class Board {
         }
 
     }
+
+    public boolean isGameOver() {
+        // Check if there are valid moves for the current player
+        ArrayList<Short> currentValidMoves = findValidMoves();
+        if (currentValidMoves != null && !currentValidMoves.isEmpty()) {
+            return false;
+        }
+    
+        // Temporarily switch turn to check the other player's valid moves
+        currentTurn = !currentTurn;
+        ArrayList<Short> otherValidMoves = findValidMoves();
+        currentTurn = !currentTurn; // Restore the turn
+    
+        // If neither player has valid moves, the game is over
+        return otherValidMoves == null || otherValidMoves.isEmpty();
+    }
+    
 
     private int getMatchResult() {
         int blackPieces = 0;

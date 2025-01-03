@@ -11,55 +11,76 @@ public class ComputerH1 extends ComputerPlayer {
     }
 
     public int getInput() {
+
+        ArrayList<Short> validMovesList = ReversiStart.currentGame.findValidMoves();
         int depth = ReversiStart.depth;
-        ArrayList<Board> nextBoards = calculateNextBoards(depth);
-        if (nextBoards.size() == 0) {
-            depth = 1;
-            nextBoards = calculateNextBoards(depth);
-        }
-        Board bestBoard = nextBoards.get(0);
-        short difference = -100;
-        for (int i = 0; i < nextBoards.size(); i++) {
-            Board tempBoard = nextBoards.get(i);
-            short[] piecesCount = tempBoard.calculatePieces();
-            short blackPieces = (short) piecesCount[0];
-            short whitePieces = (short) piecesCount[1];
-            if (this.color == 3) {
-                if (blackPieces-whitePieces > difference) {
-                    difference = (short)(blackPieces-whitePieces);
-                    bestBoard = tempBoard;
-                }
-            } else {
-                if (whitePieces-blackPieces > difference) {
-                    difference = (short)(whitePieces-blackPieces);
-                    bestBoard = tempBoard;
-                }
+        int bestScore = Integer.MIN_VALUE;
+        int bestMove = validMovesList.get(0);
+
+        for (Short move : validMovesList) {
+            Board tempBoard = new Board(ReversiStart.currentGame);
+            tempBoard.makeAMove(move, false);
+            int score = alphaBeta(tempBoard, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = move;
             }
         }
 
-        return bestBoard.lastMoves.get(bestBoard.lastMoves.size() - depth);
+        return bestMove;
     
     }
 
-    private ArrayList<Board> calculateNextBoards(int depth) {
-        ArrayList<Board> nextBoards = new ArrayList<Board>();
-        nextBoards.add(ReversiStart.currentGame);
-        ArrayList<Short> validMovesList;
+    private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
+        if (depth == 0 || board.isGameOver()) {
+            return calculateHeuristicValue(board);
+        }
 
-        for (int i = 0; i < depth; i++) {
-            int size = nextBoards.size();
-            for (int k = 0; k < size; k++) {
-                Board currentBoard = nextBoards.remove(0);
-                validMovesList = currentBoard.findValidMoves();
-                if (validMovesList != null) {
-                    for (int j = 0; j < validMovesList.size(); j++) {
-                        Board temp = new Board(currentBoard);
-                        temp.makeAMove(validMovesList.get(j), false);
-                        nextBoards.add(temp);
-                    }
+        ArrayList<Short> validMoves = board.findValidMoves();
+        if (validMoves == null || validMoves.isEmpty()) {
+            return alphaBeta(board, depth - 1, alpha, beta, !maximizingPlayer);
+        }
+
+        if (maximizingPlayer) {
+            int maxEval = Integer.MIN_VALUE;
+            for (Short move : validMoves) {
+                Board childBoard = new Board(board);
+                childBoard.makeAMove(move, false);
+                int eval = alphaBeta(childBoard, depth - 1, alpha, beta, false);
+                maxEval = Math.max(maxEval, eval);
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break; // Pruning
                 }
             }
+            return maxEval;
+        } else {
+            int minEval = Integer.MAX_VALUE;
+            for (Short move : validMoves) {
+                Board childBoard = new Board(board);
+                childBoard.makeAMove(move, false);
+                int eval = alphaBeta(childBoard, depth - 1, alpha, beta, true);
+                minEval = Math.min(minEval, eval);
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break; // Pruning
+                }
+            }
+            return minEval;
         }
-        return nextBoards;
     }
+
+    private int calculateHeuristicValue(Board board) {
+        short[] piecesCount = board.calculatePieces();
+        short blackPieces = piecesCount[0];
+        short whitePieces = piecesCount[1];
+
+        if (this.color == 3) {  // Computer is black
+            return blackPieces - whitePieces;
+        } else {    // Computer is white
+            return whitePieces - blackPieces;
+        }
+    }
+
 }

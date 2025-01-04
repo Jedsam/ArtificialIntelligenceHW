@@ -17,7 +17,7 @@ public class ReversiStart {
 
     // Add the new players to the string with their integer order
     // Human player will always be 100
-    public static final String[] PLAYERS = { "Human", "AI-H1", "AI-H2", "AI-H3"};
+    public static final String[] PLAYERS = { "Human", "AI-H1", "AI-H2", "AI-H3" };
     public static final int HUMAN_PLAYER = 100;
     public static final int AI_PLAYER_H1 = 101;
     public static final int AI_PLAYER_H2 = 102;
@@ -50,8 +50,8 @@ public class ReversiStart {
 
             myGui.startGameGUI(player1, player2);
 
-            currentGame = new Board();
-            currentGame.startGame(player1, player2);
+            currentGame = new Board(true);
+            currentGame.startGame(player1, player2, true);
         }
 
     }
@@ -71,7 +71,7 @@ public class ReversiStart {
             return (Player) new ComputerH2(playerNumber);
         } else {
             return (Player) new ComputerH3(playerNumber);
-        } 
+        }
     }
 
     // Checks if the given integer is a player number

@@ -7,6 +7,6 @@ public abstract class ComputerPlayer extends Player {
 
     @Override
     public abstract int getInput(); 
-
+    
 
 }

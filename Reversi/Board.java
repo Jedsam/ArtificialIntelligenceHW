@@ -16,7 +16,7 @@ public class Board {
     public boolean currentTurn; // Black = true, White = false
     public ArrayList<Integer> lastMoves = new ArrayList<Integer>();
 
-    Board() {
+    Board(boolean UIChange) {
         // initialise the board
         boardArray = new BitSet(128);
         // prepare the lastMoves arraylist
@@ -27,10 +27,10 @@ public class Board {
         currentTurn = true;
 
         // Starting board
-        setSquareFromBoard(27, WHITE, true);
-        setSquareFromBoard(28, BLACK, true);
-        setSquareFromBoard(35, BLACK, true);
-        setSquareFromBoard(36, WHITE, true);
+        setSquareFromBoard(27, WHITE, UIChange);
+        setSquareFromBoard(28, BLACK, UIChange);
+        setSquareFromBoard(35, BLACK, UIChange);
+        setSquareFromBoard(36, WHITE, UIChange);
     }
 
     Board(Board board) {
@@ -50,7 +50,6 @@ public class Board {
         }
         return false;
     }
-    
 
     public void flipSquares(int index, boolean UIChange) {
         // Check for below squares
@@ -281,7 +280,8 @@ public class Board {
     // Sets the board value given the color integer value
     // 01,00 (1,0)= empty, 10 (2) = white, 11 (3)= black
     public void setSquareFromBoard(int index, int value, boolean UIChange) {
-        if (UIChange) ReversiStart.addPiece(index, value);
+        if (UIChange)
+            ReversiStart.addPiece(index, value);
         if (value == BLACK) {
             // Black case
             boardArray.set(index * 2);
@@ -312,7 +312,8 @@ public class Board {
         }
     }
 
-    public void startGame(Player player1, Player player2) {
+    // Returns the win condition 0 = draw 3 = black 2 = white
+    public int startGame(Player player1, Player player2, boolean UIChange) {
         int skipCount = 0;
         int input;
         int moveCount = 0;
@@ -326,26 +327,32 @@ public class Board {
                 currentTurn = !currentTurn;
                 continue;
             }
-            
+
             moveCount++;
-            ReversiStart.addValidMoves(validMovesList);
-            /*try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
+            if (UIChange) {
+                ReversiStart.addValidMoves(validMovesList);
+            }
+            /*
+             * try {
+             * Thread.sleep(100);
+             * } catch (InterruptedException e) {
+             * e.printStackTrace();
+             * }
+             */
             skipCount = 0;
             input = CurrentPlayer.getInput();
             while (!checkPositionalAvailability(input)) {
                 // Exit number
                 if (input == ReversiStart.EXIT_CODE) {
-                    return;
+                    return ReversiStart.EXIT_CODE;
                 }
                 input = CurrentPlayer.getInput();
             }
-            ReversiStart.removeValidMoves(validMovesList);
-            makeAMove(input, true);
-            
+            if (UIChange) {
+                ReversiStart.removeValidMoves(validMovesList);
+            }
+            makeAMove(input, UIChange);
+
         }
         int matchResult = getMatchResult();
         String printMessage;
@@ -356,14 +363,16 @@ public class Board {
         } else {
             printMessage = "It is a draw!";
         }
-
-        ReversiStart.setMessage(printMessage);
-        ComputerPlayer.ComputerCounter = 1;
-        // Wait for return back to main menu message
-        input = ReversiStart.readInputFromBuffer();
-        while (input != ReversiStart.EXIT_CODE) {
+        if (UIChange) {
+            ReversiStart.setMessage(printMessage);
+            ComputerPlayer.ComputerCounter = 1;
+            // Wait for return back to main menu message
             input = ReversiStart.readInputFromBuffer();
+            while (input != ReversiStart.EXIT_CODE) {
+                input = ReversiStart.readInputFromBuffer();
+            }
         }
+        return matchResult;
 
     }
 
@@ -373,16 +382,15 @@ public class Board {
         if (currentValidMoves != null && !currentValidMoves.isEmpty()) {
             return false;
         }
-    
+
         // Temporarily switch turn to check the other player's valid moves
         currentTurn = !currentTurn;
         ArrayList<Short> otherValidMoves = findValidMoves();
         currentTurn = !currentTurn; // Restore the turn
-    
+
         // If neither player has valid moves, the game is over
         return otherValidMoves == null || otherValidMoves.isEmpty();
     }
-    
 
     private int getMatchResult() {
         int blackPieces = 0;

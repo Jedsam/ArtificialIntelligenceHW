@@ -13,7 +13,7 @@ public class ReversiStart {
     // Variable for the sleep method between each input
     private static final int TIME_BETWEEN_INPUT = 50;
 
-    public static final int depth = 5;
+    public static final int depth = 4;
 
     // Add the new players to the string with their integer order
     // Human player will always be 100

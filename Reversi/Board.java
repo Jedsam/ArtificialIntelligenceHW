@@ -329,11 +329,11 @@ public class Board {
             
             moveCount++;
             ReversiStart.addValidMoves(validMovesList);
-             try {
+            /*try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
             skipCount = 0;
             input = CurrentPlayer.getInput();
             while (!checkPositionalAvailability(input)) {

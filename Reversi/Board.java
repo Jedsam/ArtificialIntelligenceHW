@@ -405,7 +405,7 @@ public class Board {
 
     }
 
-    public short[] calculatePieces() {
+    public short[] calculatePieceCounts() {
         short blackPieces = 0;
         short whitePieces = 0;
         for (int i = 0; i < BOARD_SIZE; i++) {

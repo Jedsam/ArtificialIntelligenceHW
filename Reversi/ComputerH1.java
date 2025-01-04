@@ -72,7 +72,7 @@ public class ComputerH1 extends ComputerPlayer {
     }
 
     private int calculateHeuristicValue(Board board) {
-        short[] piecesCount = board.calculatePieces();
+        short[] piecesCount = board.calculatePieceCounts();
         short blackPieces = piecesCount[0];
         short whitePieces = piecesCount[1];
 

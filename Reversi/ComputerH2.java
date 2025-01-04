@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class ComputerH2 extends ComputerPlayer{
 
     private static final int[][] WEIGHT_BOARD = {
-        { 15,  -5,  5,  5,  5,  5,  -5, 15},
-        { -5,  -5, -1, -1, -1, -1,  -5, -5},
-        {  5,  -1,  1,  1,  1,  1,  -1,  5},
-        {  5,  -1,  1,  1,  1,  1,  -1,  5},
-        {  5,  -1,  1,  1,  1,  1,  -1,  5},
-        {  5,  -1,  1,  1,  1,  1,  -1,  5},
-        { -5,  -5, -1, -1, -1, -1,  -5, -5},
-        { 15,  -5,  5,  5,  5,  5,  -5, 15}
+        { 45, -15,  15,  15,  15,  15, -15,  45 },
+        {-15, -15,  -3,  -3,  -3,  -3, -15, -15 },
+        { 15,  -3,   3,   3,   3,   3,  -3,  15 },
+        { 15,  -3,   3,   3,   3,   3,  -3,  15 },
+        { 15,  -3,   3,   3,   3,   3,  -3,  15 },
+        { 15,  -3,   3,   3,   3,   3,  -3,  15 },
+        {-15, -15,  -3,  -3,  -3,  -3, -15, -15 },
+        { 45, -15,  15,  15,  15,  15, -15,  45 }
     };
     
     ComputerH2(int color) {
@@ -90,7 +90,7 @@ public class ComputerH2 extends ComputerPlayer{
                 int square = i*8 + j;
                 if (board.getSquareFromBoard(square) == this.color) {
                     score += WEIGHT_BOARD[i][j];
-                } else if (board.getSquareFromBoard(square) != this.color) {
+                } else if ((board.getSquareFromBoard(square) != this.color) && (board.getSquareFromBoard(square) != 0)) {
                     score -= WEIGHT_BOARD[i][j];
                 }
             }

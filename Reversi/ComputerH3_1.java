@@ -2,32 +2,25 @@ package Reversi;
 
 import java.util.ArrayList;
 
-public class ComputerH3Train1 extends ComputerPlayer {
+public class ComputerH3_1 extends ComputerPlayer {
 
     public static int[][] WEIGHT_BOARD = {
-            { 245, -76, 78, 50, 50, 78, -76, 245 },
-            { -84, -104, -12, 4, 4, -12, -104, -84 },
-            { 72, -2, 24, 10, 10, 24, -2, 72 },
-            { 68, -28, 10, 12, 12, 10, -28, 68 },
-            { 68, -28, 10, 12, 12, 10, -28, 68 },
-            { 72, -2, 24, 10, 10, 24, -2, 72 },
-            { -84, -104, -12, 4, 4, -12, -104, -84 },
-            { 245, -76, 78, 50, 50, 78, -76, 245 },
-
+            { 50, -39, 1, -4, -4, 1, -39, 50 },
+            { -43, -50, -23, -19, -19, -23, -50, -43 },
+            { -2, -19, -13, -16, -16, -13, -19, -2 },
+            { -2, -25, -15, -16, -16, -15, -25, -2 },
+            { -2, -25, -15, -16, -16, -15, -25, -2 },
+            { -2, -19, -13, -16, -16, -13, -19, -2 },
+            { -43, -50, -23, -19, -19, -23, -50, -43 },
+            { 50, -39, 1, -4, -4, 1, -39, 50 },
     };
-    private Board game;
-    public ArrayList<Short> moves;
 
-    ComputerH3Train1(int color, Board game) {
+    ComputerH3_1(int color, Board game) {
         this.game = game;
         this.color = color;
         this.name = "Computer" + ComputerCounter;
         ComputerCounter++;
-    }
-
-    public void prepareForNewGame(Board game) {
-        this.game = game;
-        moves = new ArrayList<Short>();
+        this.moves = new ArrayList<Short>();
     }
 
     public int getInput() {
@@ -53,7 +46,18 @@ public class ComputerH3Train1 extends ComputerPlayer {
     }
 
     private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        if (depth == 0 || board.isGameOver()) {
+        int matchResult;
+        if (board.isGameOver()) {
+            matchResult = board.getMatchResult();
+            if (matchResult == Board.EMPTY)
+                return 0;
+            else if (matchResult == this.color && maximizingPlayer)
+                return Integer.MAX_VALUE;
+            else {
+                return Integer.MIN_VALUE;
+            }
+        }
+        if (depth == 0) {
             return calculateHeuristicValue(board);
         }
 
@@ -121,28 +125,8 @@ public class ComputerH3Train1 extends ComputerPlayer {
         }
     }
 
-    public void UpdateTable(int matchResult) {
-        int increment;
-        if (color == matchResult) {
-            increment = 1;
-        } else {
-            increment = -1;
-        }
-        for (short currentMove : moves) {
-            int i = currentMove / 8;
-            int j = currentMove % 8;
-            WEIGHT_BOARD[i][j] += increment;
-        }
+    public static void UpdateTable(int increment, ArrayList<Short> movesList) {
 
-    }
-
-    public void UpdateTable(int matchResult, ArrayList<Short> movesList) {
-        int increment;
-        if (color == matchResult) {
-            increment = 1;
-        } else {
-            increment = -1;
-        }
         for (short currentMove : movesList) {
             int i = currentMove / 8;
             int j = currentMove % 8;

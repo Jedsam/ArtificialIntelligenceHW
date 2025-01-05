@@ -17,11 +17,13 @@ public class ReversiStart {
 
     // Add the new players to the string with their integer order
     // Human player will always be 100
-    public static final String[] PLAYERS = { "Human", "AI-H1", "AI-H2", "AI-H3" };
+    public static final String[] PLAYERS = { "Human", "AI-H1", "AI-H2", "AI-H3", "AI-H3.1", "AI-H4" };
     public static final int HUMAN_PLAYER = 100;
     public static final int AI_PLAYER_H1 = 101;
     public static final int AI_PLAYER_H2 = 102;
     public static final int AI_PLAYER_H3 = 103;
+    public static final int AI_PLAYER_H3_1 = 104;
+    public static final int AI_PLAYER_H4 = 105;
 
     // Input output variables
     public static final int INVALID_INPUT = -1;
@@ -33,51 +35,53 @@ public class ReversiStart {
         int currentInput;
         while (true) {
 
+            currentGame = new Board();
             myGui.startSelectionScreen();
             // Read the first player information
             currentInput = readInputFromBuffer();
             while (checkInvalidPlayerInput(currentInput)) {
                 currentInput = readInputFromBuffer();
             }
-            Player player1 = getPlayer(currentInput, Board.BLACK);
+            Player player1 = getPlayer(currentInput, Board.BLACK, currentGame);
 
             // Read the second player information
             currentInput = readInputFromBuffer();
             while (checkInvalidPlayerInput(currentInput)) {
                 currentInput = readInputFromBuffer();
             }
-            Player player2 = getPlayer(currentInput, Board.WHITE);
+            Player player2 = getPlayer(currentInput, Board.WHITE, currentGame);
 
             myGui.startGameGUI(player1, player2);
-
-            currentGame = new Board(true);
             currentGame.startGame(player1, player2, true);
         }
-
     }
 
     public static void startGameGUI(Player player1, Player player2) {
         myGui.startGameGUI(player1, player2);
     }
 
-    private static Player getPlayer(int currentInput, int playerNumber) {
+    private static Player getPlayer(int currentInput, int playerNumber, Board game) {
 
         if (currentInput == HUMAN_PLAYER) {
             return (Player) new HumanPlayer(
                     "Player " + (playerNumber == Board.BLACK ? 1 : 2), playerNumber);
         } else if (currentInput == AI_PLAYER_H1) {
-            return (Player) new ComputerH1(playerNumber);
+            return (Player) new ComputerH1(playerNumber, game);
         } else if (currentInput == AI_PLAYER_H2) {
-            return (Player) new ComputerH2(playerNumber);
+            return (Player) new ComputerH2(playerNumber, game);
+        } else if (currentInput == AI_PLAYER_H3) {
+            return (Player) new ComputerH3(playerNumber, game);
+        } else if (currentInput == AI_PLAYER_H3_1) {
+            return (Player) new ComputerH3_1(playerNumber, game);
         } else {
-            return (Player) new ComputerH3(playerNumber);
+            return (Player) new ComputerH4(playerNumber, game);
         }
     }
 
     // Checks if the given integer is a player number
     private static boolean checkInvalidPlayerInput(int currentInput) {
         return !(currentInput == HUMAN_PLAYER || currentInput == AI_PLAYER_H1 || currentInput == AI_PLAYER_H2
-                || currentInput == AI_PLAYER_H3);
+                || currentInput == AI_PLAYER_H3 || currentInput == AI_PLAYER_H3_1 || currentInput == AI_PLAYER_H4);
     }
 
     public static void addToInputBuffer(int val) {

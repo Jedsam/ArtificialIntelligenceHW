@@ -14,29 +14,18 @@ public class Board {
 
     BitSet boardArray;
     public boolean currentTurn; // Black = true, White = false
-    public ArrayList<Integer> lastMoves = new ArrayList<Integer>();
 
-    Board(boolean UIChange) {
+    Board() {
         // initialise the board
         boardArray = new BitSet(128);
-        // prepare the lastMoves arraylist
-        for (int i = 0; i < ReversiStart.depth; i++) {
-            lastMoves.add(-1);
-        }
         // The game starts with black
         currentTurn = true;
 
-        // Starting board
-        setSquareFromBoard(27, WHITE, UIChange);
-        setSquareFromBoard(28, BLACK, UIChange);
-        setSquareFromBoard(35, BLACK, UIChange);
-        setSquareFromBoard(36, WHITE, UIChange);
     }
 
     Board(Board board) {
         this.boardArray = (BitSet) board.boardArray.clone();
         this.currentTurn = board.currentTurn;
-        this.lastMoves = new ArrayList<>(board.lastMoves);
     }
 
     public boolean makeAMove(int index, boolean UIChange) {
@@ -44,8 +33,6 @@ public class Board {
             setSquareFromBoard(index, currentTurn ? BLACK : WHITE, UIChange);
             flipSquares(index, UIChange);
             currentTurn = !currentTurn;
-            lastMoves.remove(0);
-            lastMoves.add(index);
             return true;
         }
         return false;
@@ -318,7 +305,14 @@ public class Board {
         int input;
         int moveCount = 0;
         ArrayList<Short> validMovesList;
+
+        // Starting board
+        setSquareFromBoard(27, WHITE, UIChange);
+        setSquareFromBoard(28, BLACK, UIChange);
+        setSquareFromBoard(35, BLACK, UIChange);
+        setSquareFromBoard(36, WHITE, UIChange);
         while (skipCount < 2 || moveCount >= 64) {
+
             Player CurrentPlayer = currentTurn ? player1 : player2;
             validMovesList = findValidMoves();
             if (validMovesList == null) {
@@ -392,7 +386,7 @@ public class Board {
         return otherValidMoves == null || otherValidMoves.isEmpty();
     }
 
-    private int getMatchResult() {
+    public int getMatchResult() {
         int blackPieces = 0;
         int whitePieces = 0;
         for (int i = 0; i < BOARD_SIZE; i++) {

@@ -2,26 +2,27 @@ package Reversi;
 
 import java.util.ArrayList;
 
-public class ComputerH3Train extends ComputerPlayer {
+public class ComputerH4 extends ComputerPlayer {
 
     public static int[][] WEIGHT_BOARD = {
-            { 45, -15, 15, 15, 15, 15, -15, 45 },
-            { -15, -15, -3, -3, -3, -3, -15, -15 },
-            { 15, -3, 3, 3, 3, 3, -3, 15 },
-            { 15, -3, 3, 3, 3, 3, -3, 15 },
-            { 15, -3, 3, 3, 3, 3, -3, 15 },
-            { 15, -3, 3, 3, 3, 3, -3, 15 },
-            { -15, -15, -3, -3, -3, -3, -15, -15 },
-            { 45, -15, 15, 15, 15, 15, -15, 45 }
+            { 50, -39, 1, -4, -4, 1, -39, 50 },
+            { -43, -50, -23, -19, -19, -23, -50, -43 },
+            { -2, -19, -13, -16, -16, -13, -19, -2 },
+            { -2, -25, -15, -16, -16, -15, -25, -2 },
+            { -2, -25, -15, -16, -16, -15, -25, -2 },
+            { -2, -19, -13, -16, -16, -13, -19, -2 },
+            { -43, -50, -23, -19, -19, -23, -50, -43 },
+            { 50, -39, 1, -4, -4, 1, -39, 50 },
     };
     private Board game;
     public ArrayList<Short> moves;
 
-    ComputerH3Train(int color, Board game) {
+    ComputerH4(int color, Board game) {
         this.game = game;
         this.color = color;
         this.name = "Computer" + ComputerCounter;
         ComputerCounter++;
+        this.moves = new ArrayList<Short>();
     }
 
     public void prepareForNewGame(Board game) {
@@ -52,7 +53,18 @@ public class ComputerH3Train extends ComputerPlayer {
     }
 
     private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        if (depth == 0 || board.isGameOver()) {
+        int matchResult;
+        if (board.isGameOver()) {
+            matchResult = board.getMatchResult();
+            if (matchResult == Board.EMPTY)
+                return 0;
+            else if (matchResult == this.color && maximizingPlayer)
+                return Integer.MAX_VALUE;
+            else {
+                return Integer.MIN_VALUE;
+            }
+        }
+        if (depth == 0) {
             return calculateHeuristicValue(board);
         }
 
@@ -105,15 +117,24 @@ public class ComputerH3Train extends ComputerPlayer {
             }
         }
         int difference = calculateHeuristicValueH1(board);
-        return score + difference;
+        int mobility = calculateHeuiristicMobility(board);
+        return score + difference + mobility;
     }
 
-    public int calculateHeuristicValueH1(Board board) {
+    private int calculateHeuiristicMobility(Board board) {
+        ArrayList<Short> temp = board.findValidMoves();
+        if (temp == null) {
+            return 0;
+        } else
+            return temp.size();
+    }
+
+    private int calculateHeuristicValueH1(Board board) {
         short[] piecesCount = board.calculatePieceCounts();
         short blackPieces = piecesCount[0];
         short whitePieces = piecesCount[1];
 
-        if (this.color == 3) { // Computer is black
+        if (this.color == Board.BLACK) { // Computer is black
             return blackPieces - whitePieces;
         } else { // Computer is white
             return whitePieces - blackPieces;

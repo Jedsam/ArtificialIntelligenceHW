@@ -4,21 +4,22 @@ import java.util.ArrayList;
 
 public class ComputerH1 extends ComputerPlayer {
 
-    ComputerH1(int color) {
-        this.color = color;
+    ComputerH1(int colorBoard, Board game) {
+        this.game = game;
         this.name = "Computer" + ComputerCounter;
         ComputerCounter++;
+        this.moves = new ArrayList<Short>();
     }
 
     public int getInput() {
 
-        ArrayList<Short> validMovesList = ReversiStart.currentGame.findValidMoves();
+        ArrayList<Short> validMovesList = game.findValidMoves();
         int depth = ReversiStart.depth;
         int bestScore = Integer.MIN_VALUE;
         int bestMove = validMovesList.get(0);
 
         for (Short move : validMovesList) {
-            Board tempBoard = new Board(ReversiStart.currentGame);
+            Board tempBoard = new Board(game);
             tempBoard.makeAMove(move, false);
             int score = alphaBeta(tempBoard, depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
 
@@ -29,11 +30,22 @@ public class ComputerH1 extends ComputerPlayer {
         }
 
         return bestMove;
-    
+
     }
 
     private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        if (depth == 0 || board.isGameOver()) {
+        int matchResult;
+        if (board.isGameOver()) {
+            matchResult = board.getMatchResult();
+            if (matchResult == Board.EMPTY)
+                return 0;
+            else if (matchResult == this.color && maximizingPlayer)
+                return Integer.MAX_VALUE;
+            else {
+                return Integer.MIN_VALUE;
+            }
+        }
+        if (depth == 0) {
             return calculateHeuristicValue(board);
         }
 
@@ -76,9 +88,9 @@ public class ComputerH1 extends ComputerPlayer {
         short blackPieces = piecesCount[0];
         short whitePieces = piecesCount[1];
 
-        if (this.color == 3) {  // Computer is black
+        if (this.color == 3) { // Computer is black
             return blackPieces - whitePieces;
-        } else {    // Computer is white
+        } else { // Computer is white
             return whitePieces - blackPieces;
         }
     }

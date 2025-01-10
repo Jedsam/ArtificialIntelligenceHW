@@ -13,17 +13,18 @@ public class ReversiStart {
     // Variable for the sleep method between each input
     private static final int TIME_BETWEEN_INPUT = 50;
 
-    public static final int depth = 4;
+    public static final int depth = 6;
 
     // Add the new players to the string with their integer order
     // Human player will always be 100
-    public static final String[] PLAYERS = { "Human", "AI-H1", "AI-H2", "AI-H3", "AI-H3.1", "AI-H4" };
+    public static final String[] PLAYERS = { "Human", "AI-H1", "AI-H2", "AI-H3", "AI-H3.1", "AI-H4", "AI-H5"};
     public static final int HUMAN_PLAYER = 100;
     public static final int AI_PLAYER_H1 = 101;
     public static final int AI_PLAYER_H2 = 102;
     public static final int AI_PLAYER_H3 = 103;
     public static final int AI_PLAYER_H3_1 = 104;
     public static final int AI_PLAYER_H4 = 105;
+    public static final int AI_PLAYER_H5 = 106;
 
     // Input output variables
     public static final int INVALID_INPUT = -1;
@@ -73,15 +74,19 @@ public class ReversiStart {
             return (Player) new ComputerH3(playerNumber, game);
         } else if (currentInput == AI_PLAYER_H3_1) {
             return (Player) new ComputerH3_1(playerNumber, game);
-        } else {
+        } else if (currentInput == AI_PLAYER_H4) {
             return (Player) new ComputerH4(playerNumber, game);
+        } else if (currentInput == AI_PLAYER_H5) {
+            return (Player) new ComputerH5(playerNumber, game);
+        } else {
+            return null;
         }
     }
 
     // Checks if the given integer is a player number
     private static boolean checkInvalidPlayerInput(int currentInput) {
         return !(currentInput == HUMAN_PLAYER || currentInput == AI_PLAYER_H1 || currentInput == AI_PLAYER_H2
-                || currentInput == AI_PLAYER_H3 || currentInput == AI_PLAYER_H3_1 || currentInput == AI_PLAYER_H4);
+                || currentInput == AI_PLAYER_H3 || currentInput == AI_PLAYER_H3_1 || currentInput == AI_PLAYER_H4 || currentInput == AI_PLAYER_H5);
     }
 
     public static void addToInputBuffer(int val) {

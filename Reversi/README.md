@@ -1,0 +1,1 @@
+You should run the ReversiStart.java file and the game will be start with a pop up window.

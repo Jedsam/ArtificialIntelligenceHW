@@ -43,6 +43,7 @@ public class ReversiGUI {
     private MySquare[] squares;
     private JLabel gameStatus;
     private Player player1, player2;
+    private JLabel lastMoveLabel;
 
     public static ReversiGUI createGUI() {
         if (gui == null) {
@@ -145,11 +146,6 @@ public class ReversiGUI {
         JPanel gameFrame = new JPanel();
         gameFrame.setLayout(new GridBagLayout());
         gameFrame.setBackground(textBackgroundColor);
-        // Initilaise the board squares
-
-        // Color of the board
-
-        // Colors for green
 
         // For setting the edges
         GridBagConstraints gbc = new GridBagConstraints();
@@ -181,8 +177,8 @@ public class ReversiGUI {
         gameFrame.add(boardPanel, gbc);
 
         // Adding a return to the main menu button
-        JButton returnToMainMenuButton = new JButton("Return back to the Main Menu!");
-        returnToMainMenuButton.setPreferredSize(new Dimension(250, 80));
+        JButton returnToMainMenuButton = new JButton("Return Main Menu!");
+        returnToMainMenuButton.setPreferredSize(new Dimension(150, 80));
         returnToMainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -194,16 +190,19 @@ public class ReversiGUI {
 
         // Add game status message
         gameStatus = new JLabel(player1.getTurnMessage(), SwingConstants.CENTER);
-        gameStatus.setFont(new Font("Arial", Font.PLAIN, 20)); // Set the font size and style
-
+        gameStatus.setFont(new Font("Arial", Font.PLAIN, 16)); // Set the font size and style
         gameStatus.setBackground(textBackgroundColor);
-        // Create a JPanel with FlowLayout to center the JLabel
+        
+        lastMoveLabel = new JLabel("Last Move: None", SwingConstants.CENTER);
+        lastMoveLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        lastMoveLabel.setBackground(textBackgroundColor);
 
+        // Create a JPanel with FlowLayout to center the JLabel
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.setBackground(textBackgroundColor);
         topPanel.add(gameStatus); // Add the label to the topPanel
-
         topPanel.add(returnToMainMenuButton);
+        topPanel.add(lastMoveLabel);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gameFrame.add(topPanel, gbc);
@@ -216,6 +215,11 @@ public class ReversiGUI {
         frame.add(panel);
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void updateLastMove(String moveDescription) {
+        lastMoveLabel.setText("");
+        lastMoveLabel.setText("Last Move: " + moveDescription);
     }
 
     public void addPiece(int index, int value) {

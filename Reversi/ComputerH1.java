@@ -8,7 +8,6 @@ public class ComputerH1 extends ComputerPlayer {
         this.game = game;
         this.name = "Computer" + ComputerCounter;
         ComputerCounter++;
-        this.moves = new ArrayList<Short>();
     }
 
     public int getInput() {
@@ -28,7 +27,7 @@ public class ComputerH1 extends ComputerPlayer {
                 bestMove = move;
             }
         }
-
+        ReversiStart.updateLastMove(bestMove + "");
         return bestMove;
 
     }

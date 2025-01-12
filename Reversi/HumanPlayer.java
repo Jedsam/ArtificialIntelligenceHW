@@ -7,7 +7,9 @@ public class HumanPlayer extends Player {
     
     @Override
     public int getInput() {
-        return ReversiStart.readInputFromBuffer();
+        int move = ReversiStart.readInputFromBuffer();
+        ReversiStart.updateLastMove(move + "");
+        return move;
     }
 
     HumanPlayer (String name, int color){

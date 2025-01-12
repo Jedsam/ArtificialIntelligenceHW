@@ -38,7 +38,7 @@ public class Board {
         return false;
     }
 
-    public void flipSquares(int index, boolean UIChange) {
+    public void flipSquares(int index, boolean UIChange) {  // Flips the squares in all directions
         // Check for below squares
         if (checkPositionalAvailability(index + DOWN)) {
             if (checkLine(index, DOWN, true)) {
@@ -98,7 +98,7 @@ public class Board {
         }
     }
 
-    private void flipLine(int index, int increment, boolean dontCheckHorizontal, boolean UIChange) {
+    private void flipLine(int index, int increment, boolean dontCheckHorizontal, boolean UIChange) { // Flips the squares in a line
         int currentVal;
         int currentColor = currentTurn ? BLACK : WHITE;
         // checking for the square right next to the current piece
@@ -143,7 +143,7 @@ public class Board {
     private static final int LEFT_UP = -(BOARD_SIDE_LENGTH + 1); // -9
     private static final int LEFT_DOWN = (BOARD_SIDE_LENGTH - 1); // 7
 
-    private boolean checkValidMove(int index) {
+    private boolean checkValidMove(int index) {     // Checks if the move is valid
         // Return false if the square is not empty
         if (getSquareFromBoard(index) != EMPTY) {
             return false;
@@ -326,13 +326,13 @@ public class Board {
             if (UIChange) {
                 ReversiStart.addValidMoves(validMovesList);
             }
-            /*
-             * try {
-             * Thread.sleep(100);
-             * } catch (InterruptedException e) {
-             * e.printStackTrace();
-             * }
-             */
+            
+            try {
+            Thread.sleep(400);
+            } catch (InterruptedException e) {
+            e.printStackTrace();
+            }
+            
             skipCount = 0;
             input = CurrentPlayer.getInput();
             while (!checkPositionalAvailability(input)) {
@@ -348,7 +348,7 @@ public class Board {
             makeAMove(input, UIChange);
 
         }
-        int matchResult = getMatchResult();
+        int matchResult = getMatchResultWithUIChange();
         String printMessage;
         if (matchResult == BLACK) {
             printMessage = player1.getVictoryMessage();
@@ -397,6 +397,28 @@ public class Board {
                 whitePieces++;
             }
         }
+        if (blackPieces > whitePieces) {
+            return BLACK;
+        } else if (blackPieces < whitePieces) {
+            return WHITE;
+        } else {
+            return EMPTY; // Draw case
+        }
+
+    }
+
+    public int getMatchResultWithUIChange() {
+        int blackPieces = 0;
+        int whitePieces = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            int currentPiece = getSquareFromBoard(i);
+            if (currentPiece == BLACK) {
+                blackPieces++;
+            } else if (currentPiece == WHITE) {
+                whitePieces++;
+            }
+        }
+        ReversiStart.updateLastMove("Black:" + blackPieces + " White:" + whitePieces);
         if (blackPieces > whitePieces) {
             return BLACK;
         } else if (blackPieces < whitePieces) {

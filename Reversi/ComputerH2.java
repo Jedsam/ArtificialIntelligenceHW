@@ -20,7 +20,6 @@ public class ComputerH2 extends ComputerPlayer {
         this.color = color;
         this.name = "Computer" + ComputerCounter;
         ComputerCounter++;
-        this.moves = new ArrayList<Short>();
     }
 
     public int getInput() {
@@ -40,7 +39,7 @@ public class ComputerH2 extends ComputerPlayer {
                 bestMove = move;
             }
         }
-        moves.add((short) bestMove);
+        ReversiStart.updateLastMove(bestMove + "");
         return bestMove;
 
     }

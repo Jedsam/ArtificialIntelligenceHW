@@ -7,7 +7,6 @@ public abstract class Player {
     protected int color;
     
     protected Board game;
-    public ArrayList<Short> moves;
 
     public abstract int getInput();
 
@@ -21,6 +20,5 @@ public abstract class Player {
 
     public void prepareForNewGame(Board game) {
         this.game = game;
-        moves = new ArrayList<Short>();
     }
 }
